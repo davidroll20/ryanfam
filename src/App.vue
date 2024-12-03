@@ -12,7 +12,7 @@ import HeaderMessage from './components/HeaderMessage.vue'
       <HeaderMessage msg="Ryan Fam" />
 
       <nav>
-        <RouterLink to="/">Bulletin</RouterLink>
+        <RouterLink to="/bulletin">Bulletin</RouterLink>
         <RouterLink to="/calendar">Calendar</RouterLink>
         <RouterLink to="/about">About</RouterLink>
       </nav>
@@ -40,24 +40,34 @@ nav {
   font-size: 1rem;
   text-align: center;
   margin-top: 2rem;
-}
 
-nav a.router-link-exact-active {
-  color: var(--link-active);
-  text-decoration: underline;
-}
+  a {
+    text-decoration: none;
+    color: var(--link);
+    transition: 0.4s;
+    padding: 3px;
+    display: inline-block;
+    padding: 0 1rem;
+    border-left: 1px solid var(--color-border);
 
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
+    &.router-link-exact-active {
+      color: var(--link-active);
+      text-decoration: underline;
+    }
 
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
+    &.router-link-exact-active:hover {
+      background-color: transparent;
+    }
 
-nav a:first-of-type {
-  border: 0;
+    &:first-of-type {
+      border: 0;
+    }
+
+    &:hover {
+      border-radius: 4px;
+      color: var(--link-hover);
+      background-color: var(--link-hover-background);
+    }
+  }
 }
 </style>

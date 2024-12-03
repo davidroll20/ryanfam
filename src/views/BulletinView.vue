@@ -1,7 +1,7 @@
 <template>
   <main>
     <!-- <TheWelcome /> -->
-    <div class="calendar-view">
+    <div class="bulletin-view">
       <h1>Bulletin will be here!</h1>
     </div>
   </main>

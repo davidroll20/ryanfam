@@ -1,8 +1,12 @@
 <template>
   <div class="calendar-view">
-    <h1>Here there be calendar</h1>
+    <EventCalendar />
   </div>
 </template>
+
+<script setup lang="ts">
+import EventCalendar from '@/components/EventCalendar/EventCal.vue'
+</script>
 
 <style>
 .calendar-view {

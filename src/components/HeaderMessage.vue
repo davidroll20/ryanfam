@@ -6,13 +6,16 @@ defineProps<{
 
 <template>
   <div class="greetings">
-    <h1 class="link">{{ msg }}</h1>
+    <h1 class="title">{{ msg }}</h1>
     <h3>Check out the latest in Bulletin or click Calendar to see what's coming up!</h3>
   </div>
 </template>
 
-<style scoped>
-h1 {
+<style lang="scss" scoped>
+@use '/src/style/vars' as *;
+
+.title {
+  color: var(--ryan-fam-green);
   font-weight: 500;
   font-size: 2.6rem;
   position: relative;
