@@ -36,7 +36,7 @@
       </div>
     </div>
     <div class="event-calendar__main">
-      <FullCalendar class="event-calendar__calendar" :options="calendarOptions">
+      <FullCalendar ref="calendarRef" class="event-calendar__calendar" :options="calendarOptions">
         <template v-slot:eventContent="arg">
           <b>{{ arg.timeText }}</b>
           <i>{{ arg.event.title }}</i>
@@ -51,10 +51,12 @@ import FullCalendar from '@fullcalendar/vue3'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
-import type { CalendarOptions, DateSelectArg, EventApi } from '@fullcalendar/core'
+import type { Calendar, CalendarOptions, DateSelectArg, EventApi } from '@fullcalendar/core'
 import { INITIAL_EVENTS, createEventId } from './event-utils'
-import { ref, type Ref } from 'vue'
+import { computed, ref, type Ref } from 'vue'
 
+const calendarRef = ref(null)
+const calendarApi = computed(() => calendarRef.value?.getApi() as Calendar)
 const currentEvents: Ref<EventApi[]> = ref([])
 const showSidebar = ref(true)
 const showInstructions = ref(false)
@@ -68,12 +70,11 @@ const toggleInstructions = () => {
 
 const handleDateSelect = (selectInfo: DateSelectArg) => {
   const title = prompt('Enter a title for your event :)')
-  const calendarApi = selectInfo.view.calendar
 
-  calendarApi.unselect() // clear date selection
+  calendarApi.value.unselect() // clear date selection
 
   if (title) {
-    calendarApi.addEvent({
+    calendarApi.value.addEvent({
       id: createEventId(),
       title,
       start: selectInfo.startStr,
@@ -88,7 +89,8 @@ const handleEventClick = (clickInfo) => {
   }
 }
 const handleEvents = (events: EventApi[]) => {
-  currentEvents.value = events
+  currentEvents.value = [...events]
+  currentEvents.value.sort((a, b) => (a.startStr > b.startStr ? 1 : -1))
 }
 
 const calendarOptions: CalendarOptions = {
@@ -104,6 +106,7 @@ const calendarOptions: CalendarOptions = {
   },
   initialView: 'dayGridMonth',
   initialEvents: INITIAL_EVENTS, // alternatively, use the `events` setting to fetch from a feed
+  contentHeight: 600,
   editable: true,
   selectable: true,
   selectMirror: true,
@@ -179,5 +182,9 @@ b {
   /* the calendar root */
   max-width: 1100px;
   margin: 0 auto;
+}
+
+.fc-view-harness {
+  width: 600px;
 }
 </style>
