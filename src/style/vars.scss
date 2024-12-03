@@ -1,0 +1,16 @@
+@use 'colors' as colors;
+
+html {
+  --background-dark: #{colors.$background-dark};
+
+  --primary-text: white;
+  --link: #{colors.$ryan-fam-green};
+  --link-hover: #{colors.$ryan-fam-green};
+  --link-hover-background: #{colors.$ryan-fam-green-low-alpha};
+  --link-active: #{colors.$ryan-fam-blue};
+
+  --ryan-fam-red: #{colors.$ryan-fam-red};
+  --ryan-fam-green: #{colors.$ryan-fam-green};
+  --ryan-fam-blue: #{colors.$ryan-fam-blue};
+  --ryan-fam-purple: #{colors.$ryan-fam-purple};
+}

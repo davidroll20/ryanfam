@@ -1,26 +1,30 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
+import HeaderMessage from './components/HeaderMessage.vue'
 </script>
 
 <template>
+  <!-- <div class="app"> -->
   <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
+    <img alt="Ryan Family Crest" class="logo" src="@/assets/crest.png" width="125" height="125" />
 
     <div class="wrapper">
-      <HelloWorld msg="You did it!" />
+      <HeaderMessage msg="Ryan Fam" />
 
       <nav>
-        <RouterLink to="/">Home</RouterLink>
+        <RouterLink to="/">Bulletin</RouterLink>
+        <RouterLink to="/calendar">Calendar</RouterLink>
         <RouterLink to="/about">About</RouterLink>
       </nav>
     </div>
   </header>
-
   <RouterView />
+  <!-- </div> -->
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
+@use '/src/style/vars' as *;
+
 header {
   line-height: 1.5;
   max-height: 100vh;
@@ -33,13 +37,14 @@ header {
 
 nav {
   width: 100%;
-  font-size: 12px;
+  font-size: 1rem;
   text-align: center;
   margin-top: 2rem;
 }
 
 nav a.router-link-exact-active {
-  color: var(--color-text);
+  color: var(--link-active);
+  text-decoration: underline;
 }
 
 nav a.router-link-exact-active:hover {
@@ -56,7 +61,7 @@ nav a:first-of-type {
   border: 0;
 }
 
-@media (min-width: 1024px) {
+/* @media (min-width: 1024px) {
   header {
     display: flex;
     place-items: center;
@@ -81,5 +86,5 @@ nav a:first-of-type {
     padding: 1rem 0;
     margin-top: 1rem;
   }
-}
+} */
 </style>
