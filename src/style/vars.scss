@@ -3,7 +3,7 @@
 html {
   --background-dark: #{colors.$background-dark};
 
-  --primary-text: white;
+  --primary-text: #{colors.$off-white};
   --link: #{colors.$ryan-fam-green};
   --link-hover: #{colors.$ryan-fam-green};
   --link-hover-background: #{colors.$ryan-fam-green-low-alpha};
