@@ -1,4 +1,5 @@
 <template>
+  <EventModal />
   <div class="event-calendar">
     <button class="event-calendar__sidebar-control" @click="toggleSidebar">
       {{ showSidebar ? '>>' : '<<' }}
@@ -36,7 +37,7 @@
       </div>
     </div>
     <div class="event-calendar__main">
-      <FullCalendar ref="calendarRef" class="event-calendar__calendar" :options="calendarOptions">
+      <FullCalendar ref="calendar" class="event-calendar__calendar" :options="calendarOptions">
         <template v-slot:eventContent="arg">
           <b>{{ arg.timeText }}</b>
           <i>{{ arg.event.title }}</i>
@@ -47,16 +48,24 @@
 </template>
 
 <script setup lang="ts">
+import EventModal from '../EventModal/EventModal.vue'
 import FullCalendar from '@fullcalendar/vue3'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
-import type { Calendar, CalendarOptions, DateSelectArg, EventApi } from '@fullcalendar/core'
-import { INITIAL_EVENTS, createEventId } from './event-utils'
-import { computed, ref, type Ref } from 'vue'
+import type { CalendarOptions, DateSelectArg, EventApi } from '@fullcalendar/core'
+import { INITIAL_EVENTS } from './event-utils'
+import { onMounted, ref, type Ref } from 'vue'
+import { useEventStore } from '@/stores/eventStore'
 
-const calendarRef = ref(null)
-const calendarApi = computed(() => calendarRef.value?.getApi() as Calendar)
+const eventStore = useEventStore()
+
+const calendar = ref<InstanceType<typeof FullCalendar>>()
+
+onMounted(() => {
+  eventStore.calendarRef = calendar.value
+})
+
 const currentEvents: Ref<EventApi[]> = ref([])
 const showSidebar = ref(true)
 const showInstructions = ref(false)
@@ -69,19 +78,20 @@ const toggleInstructions = () => {
 }
 
 const handleDateSelect = (selectInfo: DateSelectArg) => {
-  const title = prompt('Enter a title for your event :)')
+  eventStore.calendarApi.unselect() // clear date selection
+  eventStore.initializeNewEvent(selectInfo)
+  eventStore.openModal('Create a new event')
+  // const title = prompt('Enter a title for your event :)')
 
-  calendarApi.value.unselect() // clear date selection
-
-  if (title) {
-    calendarApi.value.addEvent({
-      id: createEventId(),
-      title,
-      start: selectInfo.startStr,
-      end: selectInfo.endStr,
-      allDay: selectInfo.allDay,
-    })
-  }
+  // if (title) {
+  //   calendarApi.value.addEvent({
+  //     id: createEventId(),
+  //     title,
+  //     start: selectInfo.startStr,
+  //     end: selectInfo.endStr,
+  //     allDay: selectInfo.allDay,
+  //   })
+  // }
 }
 const handleEventClick = (clickInfo) => {
   if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
@@ -128,7 +138,7 @@ const calendarOptions: CalendarOptions = {
 
 h2 {
   margin: 0;
-  font-size: 16px;
+  font-size: 1.5rem;
 }
 
 ul {

@@ -2,6 +2,14 @@
 
 html {
   --background-dark: #{colors.$background-dark};
+  --background-modal: #{colors.$background-dark};
+
+  --divider-dark: #{colors.$against-background-dark};
+  --button-dark: #{colors.$against-background-dark};
+  --button-confirm: #{colors.$ryan-fam-green-dim};
+  --button-confirm-hover: #{colors.$ryan-fam-green};
+  --button-discard: #{colors.$against-background-dark};
+  --button-discard-hover: #{colors.$against-background-dark};
 
   --primary-text: #{colors.$off-white};
   --link: #{colors.$ryan-fam-green};
@@ -13,4 +21,13 @@ html {
   --ryan-fam-green: #{colors.$ryan-fam-green};
   --ryan-fam-blue: #{colors.$ryan-fam-blue};
   --ryan-fam-purple: #{colors.$ryan-fam-purple};
+
+  // #region Fonts
+  --font-title: Arial;
+
+  // #region Spacing
+  --space-sm: 4px;
+  --space-md: 8px;
+  --space-lg: 16px;
+  --space-xl: 32px;
 }

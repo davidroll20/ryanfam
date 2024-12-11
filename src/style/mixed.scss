@@ -1,0 +1,7 @@
+@use './mixins.scss' as mix;
+
+span {
+  &.sr-only {
+    @include mix.sr-only;
+  }
+}
