@@ -1,5 +1,4 @@
 <template>
-  <EventModal />
   <div class="event-calendar">
     <button class="event-calendar__sidebar-control" @click="toggleSidebar">
       {{ showSidebar ? '>>' : '<<' }}
@@ -63,7 +62,6 @@
 </template>
 
 <script setup lang="ts">
-import EventModal from '../EventModal/EventModal.vue'
 import FullCalendar from '@fullcalendar/vue3'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
@@ -96,7 +94,7 @@ const toggleInstructions = () => {
 const handleDateSelect = (selectInfo: DateSelectArg) => {
   eventStore.calendarApi.unselect() // clear date selection
   eventStore.initializeNewEvent(selectInfo)
-  eventStore.openModal('Create a new event')
+  eventStore.openModalNew('Create a new event')
   // const title = prompt('Enter a title for your event :)')
 
   // if (title) {
@@ -110,9 +108,11 @@ const handleDateSelect = (selectInfo: DateSelectArg) => {
   // }
 }
 const handleEventClick = (clickInfo) => {
-  if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
-    clickInfo.event.remove()
-  }
+  console.log('clickIfno is', clickInfo)
+  eventStore.openModalEdit(clickInfo.event.title, clickInfo.event)
+  // if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
+  //   clickInfo.event.remove()
+  // }
 }
 const handleEvents = (events: EventApi[]) => {
   currentEvents.value = [...events]

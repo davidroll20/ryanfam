@@ -1,21 +1,17 @@
 import { computed, ref, type Ref } from 'vue'
 import { defineStore } from 'pinia'
 import { createEventId } from '@/components/EventCalendar/event-utils'
-import type { Calendar, DateSelectArg } from '@fullcalendar/core'
+import type { Calendar, DateSelectArg, EventApi } from '@fullcalendar/core'
 import type FullCalendar from '@fullcalendar/vue3'
+import type { EventImpl } from '@fullcalendar/core/internal'
 
 export const useEventStore = defineStore('event', () => {
   type DateSelectArgPlus = DateSelectArg & { title: string; description: string }
-  const events = ref([])
+  const events: Ref<DateSelectArgPlus[]> = ref([])
 
   const calendarRef = ref<InstanceType<typeof FullCalendar>>()
 
   const calendarApi = computed(() => calendarRef.value?.getApi() as Calendar)
-
-  const modal = {
-    show: ref(false),
-    title: ref('Create New Event'),
-  }
 
   const newEvent: Ref<Partial<DateSelectArgPlus>> = ref({
     title: 'Some title',
@@ -29,23 +25,13 @@ export const useEventStore = defineStore('event', () => {
     newEvent.value.title = ''
     newEvent.value.description = ''
     newEvent.value.startStr = initialEvent.startStr
-    // newEvent.value.endStr = initialEvent.endStr
+    newEvent.value.endStr = initialEvent.endStr
     newEvent.value.allDay = initialEvent.allDay
-    console.log('newEvent is', newEvent.value)
-  }
-
-  const openModal = (title: string) => {
-    modal.title.value = title
-    modal.show.value = true
-  }
-
-  const closeModal = () => {
-    modal.show.value = false
   }
 
   const createEvent = (eventProps?: DateSelectArgPlus) => {
     const newEventProps = eventProps ?? newEvent.value
-    calendarApi.value.addEvent({
+    const createdEvent = calendarApi.value.addEvent({
       id: createEventId(),
       title: newEventProps.title,
       start: newEventProps.startStr,
@@ -53,17 +39,80 @@ export const useEventStore = defineStore('event', () => {
       allDay: newEventProps.allDay,
       extendedProps: { description: newEventProps.description },
     })
+
+    if (createdEvent !== null) {
+      console.log("what's the new event return?", createdEvent)
+      recordNewEvent(createdEvent)
+      console.log('these are the events', events.value)
+    }
+  }
+
+  const recordNewEvent = (eventToRecord: EventImpl) => {
+    const record: Partial<DateSelectArgPlus> = {
+      title: eventToRecord.title,
+      description: eventToRecord.extendedProps.description,
+      startStr: eventToRecord.startStr,
+      endStr: eventToRecord.endStr,
+      allDay: eventToRecord.allDay,
+    }
+    events.value.push(record)
+  }
+
+  const eventBeingEdited: Ref<Partial<DateSelectArgPlus>> = ref({})
+
+  const setEventBeingEdited = (event: EventApi) => {
+    eventBeingEdited.value.title = event.title
+    eventBeingEdited.value.startStr = event.startStr
+    eventBeingEdited.value.endStr = event.endStr
+    eventBeingEdited.value.description = event.extendedProps.description
+  }
+
+  const saveEventChanges = (eventId: string) => {}
+
+  // #region Modals
+
+  const modalNew = {
+    show: ref(false),
+    title: ref('Create New Event'),
+  }
+
+  const modalEdit = {
+    show: ref(false),
+    title: ref('Edit Event'),
+  }
+
+  const openModalNew = (title: string) => {
+    modalNew.title.value = title
+    modalNew.show.value = true
+  }
+
+  const closeModalNew = () => {
+    modalNew.show.value = false
+  }
+
+  const openModalEdit = (title: string, eventToEdit: EventApi) => {
+    setEventBeingEdited(eventToEdit)
+    modalEdit.title.value = title
+    modalEdit.show.value = true
+  }
+
+  const closeModalEdit = () => {
+    modalEdit.show.value = false
   }
 
   return {
     events,
     calendarRef,
     calendarApi,
-    modal,
     newEvent,
+    eventBeingEdited,
     initializeNewEvent,
-    openModal,
-    closeModal,
     createEvent,
+    modalNew,
+    modalEdit,
+    openModalNew,
+    closeModalNew,
+    openModalEdit,
+    closeModalEdit,
   }
 })

@@ -1,8 +1,8 @@
 <template>
   <MyModal
-    :title="store.modal.title"
-    :open="store.modal.show"
-    :onClose="store.closeModal"
+    :title="store.modalNew.title"
+    :open="store.modalNew.show"
+    :onClose="store.closeModalNew"
     :onSave="createAndClose"
     showClose
     showDiscard
@@ -31,33 +31,13 @@
 
 <script setup lang="ts">
 import { useEventStore } from '@/stores/eventStore'
-import MyModal from '../MyModal/MyModal.vue'
+import MyModal from '../../MyModal/MyModal.vue'
 
 const store = useEventStore()
 
-// const newEventTitle = computed({
-//   get() {
-//     console.log('getting event title', store.newEvent.title)
-//     return store.newEvent.title
-//   },
-//   set(newTitle: string) {
-//     console.log('setting event title', newTitle)
-//     store.newEvent.title = newTitle
-//   },
-// })
-
-// const newEventAllDay = computed({
-//   get() {
-//     return store.newEvent.allDay
-//   },
-//   set(isAllDay: boolean) {
-//     store.newEvent.allDay = isAllDay
-//   },
-// })
-
 const createAndClose = () => {
   store.createEvent()
-  store.closeModal()
+  store.closeModalNew()
 }
 </script>
 
