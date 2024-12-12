@@ -32,6 +32,21 @@
           <li v-for="event in currentEvents" :key="event.id">
             <b>{{ event.startStr }}</b>
             <i>{{ event.title }}</i>
+            <button class="show-more" @click="toggleInfo(event.id)">
+              <unicon
+                name="info-circle"
+                fill="var(--ryan-fam-blue)"
+                v-if="!showInfo[event.id]"
+              ></unicon>
+              <unicon
+                name="angle-up"
+                fill="var(--ryan-fam-blue)"
+                v-if="showInfo[event.id]"
+              ></unicon>
+            </button>
+            <p v-show="showInfo[event.id]">
+              {{ event.extendedProps.description || 'No description to show' }}
+            </p>
           </li>
         </ul>
       </div>
@@ -69,6 +84,7 @@ onMounted(() => {
 const currentEvents: Ref<EventApi[]> = ref([])
 const showSidebar = ref(true)
 const showInstructions = ref(false)
+const showInfo: Ref<{ [key: string]: boolean }> = ref({})
 
 const toggleSidebar = () => {
   showSidebar.value = !showSidebar.value
@@ -101,6 +117,12 @@ const handleEventClick = (clickInfo) => {
 const handleEvents = (events: EventApi[]) => {
   currentEvents.value = [...events]
   currentEvents.value.sort((a, b) => (a.startStr > b.startStr ? 1 : -1))
+}
+
+const toggleInfo = (eventId: string) => {
+  console.log('click!', eventId)
+  showInfo.value[eventId] = showInfo.value[eventId] === undefined ? true : !showInfo.value[eventId]
+  console.log('showInfo', showInfo)
 }
 
 const calendarOptions: CalendarOptions = {
@@ -196,5 +218,27 @@ b {
 
 .fc-view-harness {
   width: 600px;
+}
+
+.show-more {
+  background-color: transparent;
+  border-radius: 16px;
+  border: none;
+  margin-left: var(--space-sm);
+  height: 1.25rem;
+  padding: 0;
+
+  &:hover {
+    background-color: var(--ryan-fam-green);
+
+    svg {
+      fill: black;
+    }
+  }
+
+  svg {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
 }
 </style>

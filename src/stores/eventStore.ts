@@ -5,7 +5,7 @@ import type { Calendar, DateSelectArg } from '@fullcalendar/core'
 import type FullCalendar from '@fullcalendar/vue3'
 
 export const useEventStore = defineStore('event', () => {
-  type DateSelectArgPlus = DateSelectArg & { title: string }
+  type DateSelectArgPlus = DateSelectArg & { title: string; description: string }
   const events = ref([])
 
   const calendarRef = ref<InstanceType<typeof FullCalendar>>()
@@ -19,13 +19,15 @@ export const useEventStore = defineStore('event', () => {
 
   const newEvent: Ref<Partial<DateSelectArgPlus>> = ref({
     title: 'Some title',
-    startStr: 'Date',
-    endStr: 'Date',
+    description: 'Some description',
+    startStr: '01-01-2025',
+    endStr: '01-01-2025',
     allDay: false,
   })
 
   const initializeNewEvent = (initialEvent: DateSelectArg) => {
-    console.log('initialStr', initialEvent.startStr)
+    newEvent.value.title = ''
+    newEvent.value.description = ''
     newEvent.value.startStr = initialEvent.startStr
     // newEvent.value.endStr = initialEvent.endStr
     newEvent.value.allDay = initialEvent.allDay
@@ -49,6 +51,7 @@ export const useEventStore = defineStore('event', () => {
       start: newEventProps.startStr,
       end: newEventProps.endStr,
       allDay: newEventProps.allDay,
+      extendedProps: { description: newEventProps.description },
     })
   }
 

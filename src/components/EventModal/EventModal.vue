@@ -12,6 +12,8 @@
     <div class="event-modal__container" @click.stop>
       <label for="event-title">Title:</label>
       <input name="event-title" v-model="store.newEvent.title" />
+      <label for="event-description">Description:</label>
+      <input name="event-description" v-model="store.newEvent.description" />
       <label for="event-start">Start:</label>
       <input name="event-start" type="date" v-model="store.newEvent.startStr" />
       <label for="event-end" v-if="!store.newEvent.allDay">End:</label>

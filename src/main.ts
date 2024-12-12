@@ -14,9 +14,21 @@ import {
   uniSchedule,
   uniHeart,
   uniGrin,
+  uniInfoCircle,
+  uniAngleUp,
 } from 'vue-unicons/dist/icons'
 
-Unicon.add([uniCheck, uniClock, uniX, uniTimes, uniSchedule, uniHeart, uniGrin])
+Unicon.add([
+  uniCheck,
+  uniClock,
+  uniX,
+  uniTimes,
+  uniSchedule,
+  uniHeart,
+  uniGrin,
+  uniInfoCircle,
+  uniAngleUp,
+])
 
 const app = createApp(App)
 
