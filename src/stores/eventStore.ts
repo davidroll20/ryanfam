@@ -1,13 +1,15 @@
 import { computed, ref, type Ref } from 'vue'
 import { defineStore } from 'pinia'
 import { createEventId } from '@/components/EventCalendar/event-utils'
-import type { Calendar, DateSelectArg, EventApi } from '@fullcalendar/core'
+import type { Calendar, DateSelectArg, EventApi, EventInput } from '@fullcalendar/core'
 import type FullCalendar from '@fullcalendar/vue3'
 import type { EventImpl } from '@fullcalendar/core/internal'
 
 export const useEventStore = defineStore('event', () => {
   type DateSelectArgPlus = DateSelectArg & { title: string; description: string }
-  const events: Ref<DateSelectArgPlus[]> = ref([])
+
+  const initialEvents: Ref<EventInput[]> = ref([])
+  const events: Ref<EventImpl[]> = ref([])
 
   const calendarRef = ref<InstanceType<typeof FullCalendar>>()
 
@@ -16,9 +18,9 @@ export const useEventStore = defineStore('event', () => {
   const newEvent: Ref<Partial<DateSelectArgPlus>> = ref({
     title: 'Some title',
     description: 'Some description',
-    startStr: '01-01-2025',
-    endStr: '01-01-2025',
-    allDay: false,
+    startStr: '2025-01-01',
+    endStr: '2025-01-02',
+    allDay: true,
   })
 
   const initializeNewEvent = (initialEvent: DateSelectArg) => {
@@ -29,7 +31,7 @@ export const useEventStore = defineStore('event', () => {
     newEvent.value.allDay = initialEvent.allDay
   }
 
-  const createEvent = (eventProps?: DateSelectArgPlus) => {
+  const createEvent = (eventProps?: EventInput) => {
     const newEventProps = eventProps ?? newEvent.value
     const createdEvent = calendarApi.value.addEvent({
       id: createEventId(),
@@ -42,13 +44,20 @@ export const useEventStore = defineStore('event', () => {
 
     if (createdEvent !== null) {
       console.log("what's the new event return?", createdEvent)
-      recordNewEvent(createdEvent)
+      //recordNewEvent(createdEvent)
+      events.value.push(createdEvent)
       console.log('these are the events', events.value)
     }
   }
 
+  const hydrateEvents = (eventsToLoad: EventInput[]) => {
+    initialEvents.value = [...eventsToLoad]
+    console.log('loaded events', initialEvents.value)
+  }
+
   const recordNewEvent = (eventToRecord: EventImpl) => {
     const record: Partial<DateSelectArgPlus> = {
+      id: eventToRecord.id,
       title: eventToRecord.title,
       description: eventToRecord.extendedProps.description,
       startStr: eventToRecord.startStr,
@@ -102,12 +111,14 @@ export const useEventStore = defineStore('event', () => {
 
   return {
     events,
+    initialEvents,
     calendarRef,
     calendarApi,
     newEvent,
     eventBeingEdited,
     initializeNewEvent,
     createEvent,
+    hydrateEvents,
     modalNew,
     modalEdit,
     openModalNew,

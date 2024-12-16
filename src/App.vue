@@ -1,8 +1,3 @@
-<script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
-import HeaderMessage from './components/HeaderMessage.vue'
-</script>
-
 <template>
   <!-- <div class="app"> -->
   <header>
@@ -21,6 +16,16 @@ import HeaderMessage from './components/HeaderMessage.vue'
   <RouterView />
   <!-- </div> -->
 </template>
+
+<script setup lang="ts">
+import { RouterLink, RouterView } from 'vue-router'
+import HeaderMessage from './components/HeaderMessage.vue'
+import { useEventStore } from './stores/eventStore'
+import { dummyEvents } from './stores/dummyEvents'
+
+const eventStore = useEventStore()
+eventStore.hydrateEvents(dummyEvents)
+</script>
 
 <style lang="scss" scoped>
 @use '/src/style/vars' as *;

@@ -67,7 +67,7 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import type { CalendarOptions, DateSelectArg, EventApi } from '@fullcalendar/core'
-import { INITIAL_EVENTS } from './event-utils'
+// import { INITIAL_EVENTS } from './event-utils'
 import { onMounted, ref, type Ref } from 'vue'
 import { useEventStore } from '@/stores/eventStore'
 
@@ -137,7 +137,7 @@ const calendarOptions: CalendarOptions = {
     right: 'dayGridMonth,timeGridWeek,timeGridDay',
   },
   initialView: 'dayGridMonth',
-  initialEvents: INITIAL_EVENTS, // alternatively, use the `events` setting to fetch from a feed
+  initialEvents: eventStore.initialEvents, // alternatively, use the `events` setting to fetch from a feed
   contentHeight: 600,
   editable: true,
   selectable: true,
