@@ -3,13 +3,21 @@ import { defineStore } from 'pinia'
 import { createEventId } from '@/components/EventCalendar/event-utils'
 import type { Calendar, DateSelectArg, EventApi, EventInput } from '@fullcalendar/core'
 import type FullCalendar from '@fullcalendar/vue3'
-import type { EventImpl } from '@fullcalendar/core/internal'
+// import type { EventImpl } from '@fullcalendar/core/internal'
 
 export const useEventStore = defineStore('event', () => {
   type DateSelectArgPlus = DateSelectArg & { title: string; description: string }
+  type CustomEventInput = {
+    id: string
+    title: string
+    description: string
+    startStr: string
+    endStr?: string
+    allDay: boolean
+  }
 
   const initialEvents: Ref<EventInput[]> = ref([])
-  const events: Ref<EventImpl[]> = ref([])
+  // const events: Ref<EventImpl[]> = ref([])
 
   const calendarRef = ref<InstanceType<typeof FullCalendar>>()
 
@@ -45,8 +53,8 @@ export const useEventStore = defineStore('event', () => {
     if (createdEvent !== null) {
       console.log("what's the new event return?", createdEvent)
       //recordNewEvent(createdEvent)
-      events.value.push(createdEvent)
-      console.log('these are the events', events.value)
+      //events.value.push(createdEvent)
+      console.log('these are the events', calendarApi.value.getEvents())
     }
   }
 
@@ -55,28 +63,42 @@ export const useEventStore = defineStore('event', () => {
     console.log('loaded events', initialEvents.value)
   }
 
-  const recordNewEvent = (eventToRecord: EventImpl) => {
-    const record: Partial<DateSelectArgPlus> = {
-      id: eventToRecord.id,
-      title: eventToRecord.title,
-      description: eventToRecord.extendedProps.description,
-      startStr: eventToRecord.startStr,
-      endStr: eventToRecord.endStr,
-      allDay: eventToRecord.allDay,
-    }
-    events.value.push(record)
-  }
+  // const recordNewEvent = (eventToRecord: EventImpl) => {
+  //   const record: Partial<DateSelectArgPlus> = {
+  //     id: eventToRecord.id,
+  //     title: eventToRecord.title,
+  //     description: eventToRecord.extendedProps.description,
+  //     startStr: eventToRecord.startStr,
+  //     endStr: eventToRecord.endStr,
+  //     allDay: eventToRecord.allDay,
+  //   }
+  //   events.value.push(record)
+  // }
 
-  const eventBeingEdited: Ref<Partial<DateSelectArgPlus>> = ref({})
+  const eventBeingEdited: Ref<CustomEventInput> = ref({} as CustomEventInput)
 
   const setEventBeingEdited = (event: EventApi) => {
+    eventBeingEdited.value.id = event.id
     eventBeingEdited.value.title = event.title
     eventBeingEdited.value.startStr = event.startStr
     eventBeingEdited.value.endStr = event.endStr
     eventBeingEdited.value.description = event.extendedProps.description
+    eventBeingEdited.value.allDay = event.allDay
   }
 
-  const saveEventChanges = (eventId: string) => {}
+  const saveEventChanges = () => {
+    if (!eventBeingEdited.value) return
+    const editedEvent = calendarApi.value.getEventById(eventBeingEdited.value.id)
+    if (!editedEvent) {
+      console.error('No event found with id', eventBeingEdited.value.id)
+      return
+    }
+    editedEvent.setProp('title', eventBeingEdited.value.title)
+    editedEvent.setStart(eventBeingEdited.value.startStr)
+    editedEvent.setEnd(eventBeingEdited.value.endStr ?? '')
+    editedEvent.setAllDay(eventBeingEdited.value.allDay)
+    editedEvent.setExtendedProp('description', eventBeingEdited.value.description)
+  }
 
   // #region Modals
 
@@ -110,7 +132,7 @@ export const useEventStore = defineStore('event', () => {
   }
 
   return {
-    events,
+    // events,
     initialEvents,
     calendarRef,
     calendarApi,
@@ -119,6 +141,7 @@ export const useEventStore = defineStore('event', () => {
     initializeNewEvent,
     createEvent,
     hydrateEvents,
+    saveEventChanges,
     modalNew,
     modalEdit,
     openModalNew,
