@@ -95,17 +95,6 @@ const handleDateSelect = (selectInfo: DateSelectArg) => {
   eventStore.calendarApi.unselect() // clear date selection
   eventStore.initializeNewEvent(selectInfo)
   eventStore.openModalNew('Create a new event')
-  // const title = prompt('Enter a title for your event :)')
-
-  // if (title) {
-  //   calendarApi.value.addEvent({
-  //     id: createEventId(),
-  //     title,
-  //     start: selectInfo.startStr,
-  //     end: selectInfo.endStr,
-  //     allDay: selectInfo.allDay,
-  //   })
-  // }
 }
 const handleEventClick = (clickInfo) => {
   console.log('clickIfno is', clickInfo)

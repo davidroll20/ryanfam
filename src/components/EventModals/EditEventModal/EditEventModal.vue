@@ -3,13 +3,16 @@
     :title="store.modalEdit.title"
     :open="store.modalEdit.show"
     :onClose="store.closeModalEdit"
-    :onSave="saveAndClose"
+    :onSave="saveAndReset"
+    :onDelete="deleteAndReset"
+    :onDiscard="discardAndReset"
     showClose
+    showDelete
     showDiscard
     showSave
     class="event-modal"
   >
-    <div class="event-modal__container" @click.stop>
+    <div class="event-modal__container" @click.stop v-if="store.eventBeingEdited">
       <label for="event-title">Title:</label>
       <input name="event-title" v-model="store.eventBeingEdited.title" />
       <label for="event-description">Description:</label>
@@ -35,9 +38,22 @@ import MyModal from '../../MyModal/MyModal.vue'
 
 const store = useEventStore()
 
-const saveAndClose = () => {
+const saveAndReset = () => {
   store.saveEventChanges()
-  store.closeModalEdit()
+  store.resetEventBeingEdited()
+}
+
+const discardAndReset = () => {
+  store.resetEventBeingEdited()
+}
+
+const deleteAndReset = () => {
+  if (!store.eventBeingEdited) {
+    console.error("Something went wrong - tried to delete an event that doesn't exist.")
+    return
+  }
+  store.deleteEventById(store.eventBeingEdited.id)
+  store.resetEventBeingEdited()
 }
 </script>
 

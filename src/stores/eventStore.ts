@@ -75,15 +75,17 @@ export const useEventStore = defineStore('event', () => {
   //   events.value.push(record)
   // }
 
-  const eventBeingEdited: Ref<CustomEventInput> = ref({} as CustomEventInput)
+  const eventBeingEdited: Ref<CustomEventInput | null> = ref({} as CustomEventInput)
 
   const setEventBeingEdited = (event: EventApi) => {
-    eventBeingEdited.value.id = event.id
-    eventBeingEdited.value.title = event.title
-    eventBeingEdited.value.startStr = event.startStr
-    eventBeingEdited.value.endStr = event.endStr
-    eventBeingEdited.value.description = event.extendedProps.description
-    eventBeingEdited.value.allDay = event.allDay
+    eventBeingEdited.value = {
+      id: event.id,
+      title: event.title,
+      startStr: event.startStr,
+      endStr: event.endStr,
+      description: event.extendedProps.description,
+      allDay: event.allDay,
+    }
   }
 
   const saveEventChanges = () => {
@@ -98,6 +100,19 @@ export const useEventStore = defineStore('event', () => {
     editedEvent.setEnd(eventBeingEdited.value.endStr ?? '')
     editedEvent.setAllDay(eventBeingEdited.value.allDay)
     editedEvent.setExtendedProp('description', eventBeingEdited.value.description)
+  }
+
+  const deleteEventById = (eventId: string) => {
+    const editedEvent = calendarApi.value.getEventById(eventId)
+    if (!editedEvent) {
+      console.error('No event found with id', eventId)
+      return
+    }
+    editedEvent.remove()
+  }
+
+  const resetEventBeingEdited = () => {
+    eventBeingEdited.value = null
   }
 
   // #region Modals
@@ -142,6 +157,8 @@ export const useEventStore = defineStore('event', () => {
     createEvent,
     hydrateEvents,
     saveEventChanges,
+    deleteEventById,
+    resetEventBeingEdited,
     modalNew,
     modalEdit,
     openModalNew,

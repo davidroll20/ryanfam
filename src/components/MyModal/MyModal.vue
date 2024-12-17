@@ -16,7 +16,11 @@
           <slot name="footer" />
         </div>
       </template>
-      <div v-else-if="showDiscard || showSave" class="my-modal__footer my-modal__footer--buttons">
+      <div
+        v-else-if="showDelete || showDiscard || showSave"
+        class="my-modal__footer my-modal__footer--buttons"
+      >
+        <button v-if="showDelete" class="my-modal__delete" @click="deleteItem">Delete</button>
         <button v-if="showDiscard" class="my-modal__discard" @click="discardChanges">
           Discard
         </button>
@@ -33,10 +37,12 @@ type MyModalProps = {
   open?: boolean
   showClose?: boolean
   showSave?: boolean
+  showDelete?: boolean
   showDiscard?: boolean
   disableScroll?: boolean
   title: string
   onSave?: () => void
+  onDelete?: () => void
   onDiscard?: () => void
   onClose?: () => void
   onOpen?: () => void
@@ -67,6 +73,13 @@ const closeModal = () => {
   }
   if (props.onClose) {
     props.onClose()
+  }
+}
+
+const deleteItem = () => {
+  closeModal()
+  if (props.onDelete) {
+    props.onDelete()
   }
 }
 
@@ -215,6 +228,7 @@ const contentClasses = computed(() => ({
     }
   }
 
+  &__delete,
   &__discard,
   &__save {
     padding: 0.5rem 1rem;
@@ -227,6 +241,14 @@ const contentClasses = computed(() => ({
     color: var(--primary-text);
 
     cursor: pointer;
+  }
+
+  &__delete {
+    background: var(--button-delete);
+
+    &:hover {
+      background: var(--button-delete-hover);
+    }
   }
 
   &__discard {
