@@ -17,6 +17,8 @@ import {
   uniInfoCircle,
   uniAngleUp,
 } from 'vue-unicons/dist/icons'
+import { firebaseApp } from './firebase'
+import { VueFire } from 'vuefire'
 
 Unicon.add([
   uniCheck,
@@ -34,6 +36,11 @@ const app = createApp(App)
 
 app.use(Unicon)
 app.use(createPinia())
+app.use(VueFire, {
+  firebaseApp,
+  // modules: [VueFireFirestoreOptionsAPI()],
+})
+
 app.use(router)
 
 app.mount('#app')

@@ -67,8 +67,7 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import type { CalendarOptions, DateSelectArg, EventApi } from '@fullcalendar/core'
-// import { INITIAL_EVENTS } from './event-utils'
-import { onMounted, ref, type Ref } from 'vue'
+import { computed, onMounted, ref, type Ref } from 'vue'
 import { useEventStore } from '@/stores/eventStore'
 
 const eventStore = useEventStore()
@@ -97,11 +96,7 @@ const handleDateSelect = (selectInfo: DateSelectArg) => {
   eventStore.openModalNew('Create a new event')
 }
 const handleEventClick = (clickInfo) => {
-  console.log('clickIfno is', clickInfo)
   eventStore.openModalEdit(clickInfo.event.title, clickInfo.event)
-  // if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
-  //   clickInfo.event.remove()
-  // }
 }
 const handleEvents = (events: EventApi[]) => {
   currentEvents.value = [...events]
@@ -109,10 +104,15 @@ const handleEvents = (events: EventApi[]) => {
 }
 
 const toggleInfo = (eventId: string) => {
-  console.log('click!', eventId)
   showInfo.value[eventId] = showInfo.value[eventId] === undefined ? true : !showInfo.value[eventId]
-  console.log('showInfo', showInfo)
 }
+
+const events = computed(() => {
+  return {
+    events: eventStore.calendarEvents,
+    id: 'main',
+  }
+})
 
 const calendarOptions: CalendarOptions = {
   plugins: [
@@ -126,7 +126,7 @@ const calendarOptions: CalendarOptions = {
     right: 'dayGridMonth,timeGridWeek,timeGridDay',
   },
   initialView: 'dayGridMonth',
-  initialEvents: eventStore.initialEvents, // alternatively, use the `events` setting to fetch from a feed
+  eventSources: [events.value],
   contentHeight: 600,
   editable: true,
   selectable: true,
