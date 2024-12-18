@@ -20,11 +20,6 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
 import HeaderMessage from './components/HeaderMessage.vue'
-import { useEventStore } from './stores/eventStore'
-import { dummyEvents } from './stores/dummyEvents'
-
-const eventStore = useEventStore()
-eventStore.hydrateEvents(dummyEvents)
 </script>
 
 <style lang="scss" scoped>

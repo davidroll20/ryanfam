@@ -1,9 +1,12 @@
-import { computed, ref, type Ref } from 'vue'
+import { computed, ref, watch, type Ref } from 'vue'
 import { defineStore } from 'pinia'
 import { createEventId } from '@/components/EventCalendar/event-utils'
 import type { Calendar, DateSelectArg, EventApi, EventInput } from '@fullcalendar/core'
 import type FullCalendar from '@fullcalendar/vue3'
-// import type { EventImpl } from '@fullcalendar/core/internal'
+import { db, ryanFamCalendarRef, ryanFamCollection } from '@/firebase'
+import type { EventImpl } from '@fullcalendar/core/internal'
+import { deleteDoc, doc, setDoc, updateDoc } from 'firebase/firestore'
+import { useCollection } from 'vuefire'
 
 export const useEventStore = defineStore('event', () => {
   type DateSelectArgPlus = DateSelectArg & { title: string; description: string }
@@ -17,7 +20,7 @@ export const useEventStore = defineStore('event', () => {
   }
 
   const initialEvents: Ref<EventInput[]> = ref([])
-  // const events: Ref<EventImpl[]> = ref([])
+  const calendarEvents: Ref<EventInput[]> = ref([])
 
   const calendarRef = ref<InstanceType<typeof FullCalendar>>()
 
@@ -39,41 +42,23 @@ export const useEventStore = defineStore('event', () => {
     newEvent.value.allDay = initialEvent.allDay
   }
 
-  const createEvent = (eventProps?: EventInput) => {
-    const newEventProps = eventProps ?? newEvent.value
-    const createdEvent = calendarApi.value.addEvent({
-      id: createEventId(),
-      title: newEventProps.title,
-      start: newEventProps.startStr,
-      end: newEventProps.endStr,
-      allDay: newEventProps.allDay,
-      extendedProps: { description: newEventProps.description },
-    })
-
-    if (createdEvent !== null) {
-      console.log("what's the new event return?", createdEvent)
-      //recordNewEvent(createdEvent)
-      //events.value.push(createdEvent)
-      console.log('these are the events', calendarApi.value.getEvents())
+  const sanitizeEventInput = (eventInput: EventInput): EventInput => {
+    return {
+      id: eventInput.id ?? createEventId(),
+      title: eventInput.title ?? 'Untitled',
+      start: eventInput.startStr,
+      end: eventInput.endStr,
+      allDay: eventInput.allDay ?? false,
+      extendedProps: { description: eventInput.description },
     }
   }
 
-  const hydrateEvents = (eventsToLoad: EventInput[]) => {
-    initialEvents.value = [...eventsToLoad]
-    console.log('loaded events', initialEvents.value)
+  const createEvent = (eventProps?: EventInput) => {
+    const newEventProps = eventProps ?? newEvent.value
+    const id = createEventId()
+    const event = sanitizeEventInput({ id, ...newEventProps })
+    createCalendarDocument(event)
   }
-
-  // const recordNewEvent = (eventToRecord: EventImpl) => {
-  //   const record: Partial<DateSelectArgPlus> = {
-  //     id: eventToRecord.id,
-  //     title: eventToRecord.title,
-  //     description: eventToRecord.extendedProps.description,
-  //     startStr: eventToRecord.startStr,
-  //     endStr: eventToRecord.endStr,
-  //     allDay: eventToRecord.allDay,
-  //   }
-  //   events.value.push(record)
-  // }
 
   const eventBeingEdited: Ref<CustomEventInput | null> = ref({} as CustomEventInput)
 
@@ -100,6 +85,7 @@ export const useEventStore = defineStore('event', () => {
     editedEvent.setEnd(eventBeingEdited.value.endStr ?? '')
     editedEvent.setAllDay(eventBeingEdited.value.allDay)
     editedEvent.setExtendedProp('description', eventBeingEdited.value.description)
+    updateCalendarDocument(editedEvent)
   }
 
   const deleteEventById = (eventId: string) => {
@@ -109,10 +95,66 @@ export const useEventStore = defineStore('event', () => {
       return
     }
     editedEvent.remove()
+    deleteCalendarDocument(eventId)
   }
 
   const resetEventBeingEdited = () => {
     eventBeingEdited.value = null
+  }
+
+  // #region Firebase Integration
+
+  const firebaseEvents = useCollection(ryanFamCalendarRef)
+
+  watch(
+    firebaseEvents,
+    (newVals) => {
+      const converted: EventInput[] = []
+      newVals.forEach((eventFromDb) => converted.push(sanitizeEventInput(eventFromDb)))
+      calendarEvents.value = [...converted]
+      const eventSource = calendarApi.value.getEventSourceById('main')
+      eventSource?.remove()
+      calendarApi.value.addEventSource({ events: calendarEvents.value, id: 'main' })
+    },
+    { deep: true },
+  )
+
+  async function createCalendarDocument(event: EventInput) {
+    const newCalendarDocument = {
+      id: event.id ?? createEventId(),
+      title: event.title,
+      description: event.extendedProps?.description ?? '',
+      startStr: event.startStr || event.start,
+      endStr: event.endStr || event.end,
+      allDay: event.allDay,
+    }
+
+    const calendarDocRef = doc(db, ryanFamCollection.CALENDAR, newCalendarDocument.id)
+
+    await setDoc(calendarDocRef, newCalendarDocument)
+  }
+
+  async function updateCalendarDocument(event: EventImpl) {
+    if (!event.id) {
+      console.error('Cannot update event with no id.')
+      return
+    }
+    const updatedCalendarDocument = {
+      id: event.id,
+      title: event.title,
+      description: event.extendedProps?.description ?? '',
+      startStr: event.startStr,
+      endStr: event.endStr,
+      allDay: event.allDay,
+    }
+
+    const calendarDocRef = doc(db, ryanFamCollection.CALENDAR, updatedCalendarDocument.id)
+
+    await updateDoc(calendarDocRef, updatedCalendarDocument)
+  }
+
+  async function deleteCalendarDocument(id: string) {
+    await deleteDoc(doc(db, ryanFamCollection.CALENDAR, id))
   }
 
   // #region Modals
@@ -147,7 +189,7 @@ export const useEventStore = defineStore('event', () => {
   }
 
   return {
-    // events,
+    calendarEvents,
     initialEvents,
     calendarRef,
     calendarApi,
@@ -155,7 +197,6 @@ export const useEventStore = defineStore('event', () => {
     eventBeingEdited,
     initializeNewEvent,
     createEvent,
-    hydrateEvents,
     saveEventChanges,
     deleteEventById,
     resetEventBeingEdited,

@@ -1,6 +1,8 @@
-let eventGuid = 0
+import { nanoid } from 'nanoid'
+
 export const todayStr = new Date().toISOString().replace(/T.*$/, '') // YYYY-MM-DD of today
 
+//deprecated, use only as example of minimal event shape
 export const INITIAL_EVENTS = [
   {
     id: createEventId(),
@@ -15,5 +17,5 @@ export const INITIAL_EVENTS = [
 ]
 
 export function createEventId() {
-  return String(eventGuid++)
+  return nanoid()
 }
