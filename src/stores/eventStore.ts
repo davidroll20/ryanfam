@@ -1,6 +1,10 @@
 import { computed, ref, watch, type Ref } from 'vue'
 import { defineStore } from 'pinia'
-import { createEventId } from '@/components/EventCalendar/event-utils'
+import {
+  createEventId,
+  getDateFromISODateTime,
+  getTimeFromISODateTime,
+} from '@/components/EventCalendar/event-utils'
 import type { Calendar, DateSelectArg, EventApi, EventInput } from '@fullcalendar/core'
 import type FullCalendar from '@fullcalendar/vue3'
 import { db, ryanFamCalendarRef, ryanFamCollection } from '@/firebase'
@@ -9,7 +13,15 @@ import { deleteDoc, doc, setDoc, updateDoc } from 'firebase/firestore'
 import { useCollection } from 'vuefire'
 
 export const useEventStore = defineStore('event', () => {
-  type DateSelectArgPlus = DateSelectArg & { title: string; description: string }
+  type DateSelectArgPlus = {
+    title: string
+    description: string
+    startDateStr: string
+    startTimeStr: string
+    endDateStr: string
+    endTimeStr: string
+    allDay: boolean
+  }
   type CustomEventInput = {
     id: string
     title: string
@@ -29,17 +41,22 @@ export const useEventStore = defineStore('event', () => {
   const newEvent: Ref<Partial<DateSelectArgPlus>> = ref({
     title: 'Some title',
     description: 'Some description',
-    startStr: '2025-01-01',
-    endStr: '2025-01-02',
+    startDateStr: '2025-01-01',
+    startTimeStr: 'T00:00:00',
+    endDateStr: '2025-01-02',
+    endTimeStr: 'T00:00:00',
     allDay: true,
   })
 
   const initializeNewEvent = (initialEvent: DateSelectArg) => {
     newEvent.value.title = ''
     newEvent.value.description = ''
-    newEvent.value.startStr = initialEvent.startStr
-    newEvent.value.endStr = initialEvent.endStr
+    newEvent.value.startDateStr = getDateFromISODateTime(initialEvent.startStr)
+    newEvent.value.startTimeStr = getTimeFromISODateTime(initialEvent.startStr)
+    newEvent.value.endDateStr = getDateFromISODateTime(initialEvent.endStr)
+    newEvent.value.endTimeStr = getTimeFromISODateTime(initialEvent.endStr)
     newEvent.value.allDay = initialEvent.allDay
+    console.log('new event is', newEvent)
   }
 
   const sanitizeEventInput = (eventInput: EventInput): EventInput => {
