@@ -14,7 +14,7 @@ import type { Calendar, DateSelectArg, EventApi, EventInput } from '@fullcalenda
 import type FullCalendar from '@fullcalendar/vue3';
 import { db, ryanFamCalendarRef, ryanFamCollection } from '@/firebase';
 import type { EventImpl } from '@fullcalendar/core/internal';
-import { deleteDoc, doc, setDoc, updateDoc, type DocumentData } from 'firebase/firestore';
+import { deleteDoc, doc, setDoc, updateDoc } from 'firebase/firestore';
 import { useCollection } from 'vuefire';
 
 export const useEventStore = defineStore('event', () => {
@@ -109,13 +109,13 @@ export const useEventStore = defineStore('event', () => {
       return;
     }
     editedEvent.setProp('title', eventBeingEdited.value.title);
+    editedEvent.setAllDay(eventBeingEdited.value.allDay);
     editedEvent.setStart(
       combineDateAndTime(eventBeingEdited.value.startDateStr, eventBeingEdited.value.startTimeStr),
     );
     editedEvent.setEnd(
       combineDateAndTime(eventBeingEdited.value.endDateStr, eventBeingEdited.value.endTimeStr),
     );
-    editedEvent.setAllDay(eventBeingEdited.value.allDay);
     editedEvent.setExtendedProp('description', eventBeingEdited.value.description);
     updateCalendarDocument(editedEvent);
   };
@@ -203,6 +203,7 @@ export const useEventStore = defineStore('event', () => {
       console.error('Cannot update event with no id.');
       return;
     }
+    console.log('updating - startStr:', event.startStr, 'endStr:', event.endStr);
     const updatedCalendarDocument = {
       id: event.id,
       title: event.title,
