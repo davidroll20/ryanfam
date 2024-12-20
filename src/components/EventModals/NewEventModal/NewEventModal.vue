@@ -51,16 +51,16 @@
 </template>
 
 <script setup lang="ts">
-import { useEventStore } from '@/stores/eventStore'
-import MyModal from '../../MyModal/MyModal.vue'
-import { timeOptions } from '@/components/EventCalendar/event-utils'
+import { useEventStore } from '@/stores/eventStore';
+import MyModal from '../../MyModal/MyModal.vue';
+import { timeOptions } from '@/components/EventCalendar/event-utils';
 
-const store = useEventStore()
+const store = useEventStore();
 
 const createAndClose = () => {
-  store.createEvent()
-  store.closeModalNew()
-}
+  store.finalizeAndAddNewEvent();
+  store.closeModalNew();
+};
 </script>
 
 <style scoped lang="scss">
