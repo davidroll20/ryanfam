@@ -8,6 +8,7 @@ import {
   forceUTC,
   getDateFromISODateTime,
   getTimeFromISODateTime,
+  removeTimeZoneFromDateTime,
 } from '@/components/EventCalendar/event-utils';
 import type { Calendar, DateSelectArg, EventApi, EventInput } from '@fullcalendar/core';
 import type FullCalendar from '@fullcalendar/vue3';
@@ -78,15 +79,25 @@ export const useEventStore = defineStore('event', () => {
   const eventBeingEdited: Ref<EventFromUI | null> = ref({} as EventFromUI);
 
   const setEventBeingEdited = (event: EventApi) => {
-    eventBeingEdited.value = {
+    const toEdit = {
       id: event.id,
       title: event.title,
-      startDateStr: getDateFromISODateTime(event.startStr),
-      startTimeStr: getTimeFromISODateTime(event.startStr),
-      endDateStr: getDateFromISODateTime(event.endStr),
-      endTimeStr: getTimeFromISODateTime(event.endStr),
-      description: event.extendedProps.description,
       allDay: event.allDay,
+      startStr: event.startStr,
+      endStr: event.endStr,
+      extendedProps: event.extendedProps,
+    };
+    toEdit.startStr = removeTimeZoneFromDateTime(toEdit.startStr);
+    toEdit.endStr = removeTimeZoneFromDateTime(toEdit.endStr);
+    eventBeingEdited.value = {
+      id: toEdit.id,
+      title: toEdit.title,
+      startDateStr: getDateFromISODateTime(toEdit.startStr),
+      startTimeStr: getTimeFromISODateTime(toEdit.startStr),
+      endDateStr: getDateFromISODateTime(toEdit.endStr),
+      endTimeStr: getTimeFromISODateTime(toEdit.endStr),
+      description: toEdit.extendedProps.description,
+      allDay: toEdit.allDay,
     };
   };
 

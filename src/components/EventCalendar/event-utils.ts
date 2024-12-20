@@ -22,14 +22,21 @@ export function createEventId() {
   return nanoid();
 }
 
+export function removeTimeZoneFromDateTime(datetime: string) {
+  if (datetime.length > 10 && datetime[datetime.length - 6] === '-') {
+    return datetime.substring(0, datetime.length - 6);
+  }
+  return datetime;
+}
+
 /** Takes an ISO datetime string and returns only the date portion, e.g. 2024-12-04T02:32:00 -> 2024-12-04 */
-export function getDateFromISODateTime(datetime: string) {
+export function getDateFromISODateTime(datetime: string | Date) {
   if (!datetime) throw `Invalid datetime provided: ${datetime}`;
   return datetime.toString().split('T')[0];
 }
 
 /** Takes an ISO datetime string and returns only the time portion, e.g. 2024-12-04T02:32:00 -> 02:32:00 */
-export function getTimeFromISODateTime(datetime: string) {
+export function getTimeFromISODateTime(datetime: string | Date) {
   if (!datetime) throw `Invalid datetime provided: ${datetime}`;
   const split = datetime.toString().split('T');
   return split[1] ?? '00:00:00';
