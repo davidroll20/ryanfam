@@ -69,6 +69,7 @@ import interactionPlugin from '@fullcalendar/interaction'
 import type { CalendarOptions, DateSelectArg, EventApi } from '@fullcalendar/core'
 import { computed, onMounted, ref, type Ref } from 'vue'
 import { useEventStore } from '@/stores/eventStore'
+import { convertLocalToUTC } from './event-utils'
 
 const eventStore = useEventStore()
 
@@ -92,6 +93,8 @@ const toggleInstructions = () => {
 
 const handleDateSelect = (selectInfo: DateSelectArg) => {
   eventStore.calendarApi.unselect() // clear date selection
+  selectInfo.startStr = convertLocalToUTC(selectInfo.startStr)
+  selectInfo.endStr = convertLocalToUTC(selectInfo.endStr)
   eventStore.initializeNewEvent(selectInfo)
   eventStore.openModalNew('Create a new event')
 }
