@@ -1,15 +1,17 @@
-<script setup lang="ts">
-defineProps<{
-  msg: string
-}>()
-</script>
-
 <template>
   <div class="greetings">
-    <h1 class="title">{{ msg }}</h1>
+    <h1 class="title">{{ props.msg }}</h1>
     <h3>Check out the latest in Bulletin or click Calendar to see what's coming up!</h3>
   </div>
 </template>
+
+<script setup lang="ts">
+type HeaderMessageProps = {
+  msg: string;
+};
+
+const props = defineProps<HeaderMessageProps>();
+</script>
 
 <style lang="scss" scoped>
 @use '/src/style/vars' as *;
