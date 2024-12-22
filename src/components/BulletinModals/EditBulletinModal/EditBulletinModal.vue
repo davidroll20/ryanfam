@@ -42,7 +42,7 @@ const discardAndReset = () => {
 
 const deleteAndReset = () => {
   if (!store.bulletinBeingEdited || !store.bulletinBeingEdited.id) {
-    console.error("Something went wrong - tried to delete an bulletin that doesn't exist.");
+    console.error("Something went wrong - tried to delete a bulletin that doesn't exist.");
     return;
   }
   store.deleteBulletinById(store.bulletinBeingEdited.id);
