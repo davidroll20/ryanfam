@@ -10,10 +10,12 @@ export type Bulletin = {
   title: string;
   body: string;
   author: string;
+  created: Date;
+  lastEdited: Date;
 };
 
 export const useBulletinStore = defineStore('bulletin', () => {
-  type NewBulletin = Omit<Bulletin, 'id'>;
+  type NewBulletin = Omit<Bulletin, 'id' | 'created' | 'lastEdited'>;
 
   const bulletins: Ref<Bulletin[]> = ref([]);
 
@@ -30,6 +32,7 @@ export const useBulletinStore = defineStore('bulletin', () => {
   const initializeNewBulletin = () => {
     newBulletin.value.title = '';
     newBulletin.value.body = '';
+    newBulletin.value.author = '';
   };
 
   /** Fired upon completion of a new bulletin, adding to firebase */
@@ -54,6 +57,8 @@ export const useBulletinStore = defineStore('bulletin', () => {
       title: bulletin.title,
       body: bulletin.body,
       author: bulletin.author,
+      lastEdited: bulletin.lastEdited,
+      created: bulletin.created,
     };
   };
 
@@ -84,6 +89,8 @@ export const useBulletinStore = defineStore('bulletin', () => {
       title: bulletinFromDb.title ?? 'Untitled',
       body: bulletinFromDb.body ?? '',
       author: bulletinFromDb.author ?? '',
+      created: bulletinFromDb.created,
+      lastEdited: bulletinFromDb.lastEdited,
     };
     return translated;
   };
@@ -105,11 +112,13 @@ export const useBulletinStore = defineStore('bulletin', () => {
   );
 
   async function createBulletinDocument(bulletin: NewBulletin) {
-    const newBulletinDocument = {
+    const newBulletinDocument: Bulletin = {
       id: nanoid(),
       title: bulletin.title,
       body: bulletin.body ?? '',
       author: bulletin.author,
+      created: new Date(),
+      lastEdited: new Date(),
     };
 
     const bulletinDocRef = doc(db, ryanFamCollection.BULLETIN, newBulletinDocument.id);
@@ -127,6 +136,8 @@ export const useBulletinStore = defineStore('bulletin', () => {
       title: bulletin.title,
       body: bulletin.body ?? '',
       author: bulletin.author,
+      created: bulletin.created,
+      lastEdited: new Date(),
     };
 
     const bulletinDocRef = doc(db, ryanFamCollection.BULLETIN, updatedBulletinDocument.id);

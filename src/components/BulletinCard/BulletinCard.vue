@@ -22,7 +22,7 @@ const props = defineProps<BulletinCardProps>();
 const route = computed(() => `/bulletin/${props.bulletin.id}`);
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @use '/src/style/vars' as *;
 
 .bulletin-card {
@@ -30,13 +30,22 @@ const route = computed(() => `/bulletin/${props.bulletin.id}`);
   border-radius: 8px;
   padding: 8px;
   width: 200px;
-  height: 250px;
+  height: 200px;
   background-color: grey; //todo var
+  color: var(--primary-text);
+  overflow-y: hidden;
+
   &__title {
-    font-size: 24px;
+    font-size: 16px;
   }
   &__body {
-    font-size: 16px;
+    font-size: 12px;
+  }
+
+  &:hover {
+    cursor: pointer;
+    transform: scale(120%);
+    border: 1px solid var(--ryan-fam-green);
   }
 }
 </style>

@@ -1,11 +1,11 @@
-import './style/main.scss'
+import './style/main.scss';
 
-import { createApp } from 'vue'
-import { createPinia } from 'pinia'
+import { createApp } from 'vue';
+import { createPinia } from 'pinia';
 
-import App from './App.vue'
-import router from './router'
-import Unicon from 'vue-unicons'
+import App from './App.vue';
+import router from './router';
+import Unicon from 'vue-unicons';
 import {
   uniCheck,
   uniClock,
@@ -16,9 +16,10 @@ import {
   uniGrin,
   uniInfoCircle,
   uniAngleUp,
-} from 'vue-unicons/dist/icons'
-import { firebaseApp } from './firebase'
-import { VueFire } from 'vuefire'
+  uniPlusCircle,
+} from 'vue-unicons/dist/icons';
+import { firebaseApp } from './firebase';
+import { VueFire } from 'vuefire';
 
 Unicon.add([
   uniCheck,
@@ -30,17 +31,18 @@ Unicon.add([
   uniGrin,
   uniInfoCircle,
   uniAngleUp,
-])
+  uniPlusCircle,
+]);
 
-const app = createApp(App)
+const app = createApp(App);
 
-app.use(Unicon)
-app.use(createPinia())
+app.use(Unicon);
+app.use(createPinia());
 app.use(VueFire, {
   firebaseApp,
   // modules: [VueFireFirestoreOptionsAPI()],
-})
+});
 
-app.use(router)
+app.use(router);
 
-app.mount('#app')
+app.mount('#app');
