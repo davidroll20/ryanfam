@@ -1,27 +1,29 @@
 <template>
-  <div class="bulletin-card" @click="goToBulletin()">
+  <div class="bulletin-card" @click="editBulletin()">
     <RouterLink :to="route">
-      <h1 class="bulletin-card__title">{{ props.title }}</h1>
+      <h1 class="bulletin-card__title">{{ props.bulletin.title }}</h1>
     </RouterLink>
-    <p class="bulletin-card__body">{{ props.body }}</p>
+    <p class="bulletin-card__body">{{ props.bulletin.body }}</p>
   </div>
 </template>
 
 <script setup lang="ts">
 import { RouterLink } from 'vue-router';
 import { computed } from 'vue';
+import { useBulletinStore, type Bulletin } from '@/stores/bulletinStore';
 
 type BulletinCardProps = {
-  id: string;
-  title: string;
-  body: string;
+  bulletin: Bulletin;
 };
 
+const store = useBulletinStore();
 const props = defineProps<BulletinCardProps>();
 
-const route = computed(() => `/bulletin/${props.id}`);
+const route = computed(() => `/bulletin/${props.bulletin.id}`);
 
-const goToBulletin = () => {};
+const editBulletin = () => {
+  store.openModalEdit(`Edit ${props.bulletin.title}`, props.bulletin);
+};
 </script>
 
 <style lang="scss" scoped>

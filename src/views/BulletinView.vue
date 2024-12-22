@@ -2,15 +2,16 @@
   <main>
     <!-- <TheWelcome /> -->
     <div class="bulletin-view">
+      <NewBulletinModal />
+      <EditBulletinModal />
       <h1>Bulletin will be here!</h1>
+      <button @click="store.openModalNew()">Add</button>
       <div class="bulletin-view__cards">
         <BulletinCard
           class="bulletin-view__card"
-          v-for="num in repeat"
-          :key="num"
-          id="test-id"
-          title="Test Bulletin"
-          body="Lorem ipsum dolor sit amet klaatu barata nikto seria fatel sifii"
+          v-for="bulletin in store.bulletins"
+          :key="bulletin.id"
+          :bulletin="bulletin"
         />
       </div>
     </div>
@@ -19,6 +20,11 @@
 
 <script setup lang="ts">
 import BulletinCard from '@/components/BulletinCard/BulletinCard.vue';
+import NewBulletinModal from '@/components/BulletinModals/NewBulletinModal/NewBulletinModal.vue';
+import EditBulletinModal from '@/components/BulletinModals/EditBulletinModal/EditBulletinModal.vue';
+import { useBulletinStore } from '@/stores/bulletinStore';
+
+const store = useBulletinStore();
 
 const repeat = [1, 2, 3];
 
