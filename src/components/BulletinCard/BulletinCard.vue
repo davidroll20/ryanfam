@@ -3,6 +3,7 @@
     <RouterLink :to="route">
       <h1 class="bulletin-card__title">{{ props.bulletin.title }}</h1>
     </RouterLink>
+    <sub>by {{ props.bulletin.author }}</sub>
     <p class="bulletin-card__body">{{ props.bulletin.body }}</p>
   </div>
 </template>
