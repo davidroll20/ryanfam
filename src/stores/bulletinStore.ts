@@ -9,6 +9,7 @@ export type Bulletin = {
   id: string;
   title: string;
   body: string;
+  author: string;
 };
 
 export const useBulletinStore = defineStore('bulletin', () => {
@@ -20,8 +21,9 @@ export const useBulletinStore = defineStore('bulletin', () => {
 
   /** A persistent object wired up the the fields on the NewBulletinModal */
   const newBulletin: Ref<NewBulletin> = ref({
-    title: 'Some title',
-    body: 'Some body',
+    title: '',
+    body: '',
+    author: 'Somebody',
   });
 
   /** Fired when a new bulletin is created, resetting fields on newBulletin */
@@ -45,6 +47,7 @@ export const useBulletinStore = defineStore('bulletin', () => {
       id: bulletin.id,
       title: bulletin.title,
       body: bulletin.body,
+      author: bulletin.author,
     };
   };
 
@@ -74,6 +77,7 @@ export const useBulletinStore = defineStore('bulletin', () => {
       id: bulletinFromDb.id,
       title: bulletinFromDb.title ?? 'Untitled',
       body: bulletinFromDb.body ?? '',
+      author: bulletinFromDb.author ?? '',
     };
     return translated;
   };
@@ -85,13 +89,6 @@ export const useBulletinStore = defineStore('bulletin', () => {
   watch(
     firebaseBulletins,
     (newVals) => {
-      newVals = [
-        {
-          id: 'test-id',
-          title: 'Test Bulletin',
-          body: 'Lorem ipsum dolor sit amet klaatu barata nikto seria fatel sifii',
-        },
-      ];
       const converted: Bulletin[] = [];
       (newVals as DocumentData[]).forEach((bulletinFromDb) => {
         converted.push(translateBulletinFromDBToApp(bulletinFromDb));
@@ -106,6 +103,7 @@ export const useBulletinStore = defineStore('bulletin', () => {
       id: nanoid(),
       title: bulletin.title,
       body: bulletin.body ?? '',
+      author: bulletin.author,
     };
 
     const bulletinDocRef = doc(db, ryanFamCollection.BULLETIN, newBulletinDocument.id);
@@ -122,6 +120,7 @@ export const useBulletinStore = defineStore('bulletin', () => {
       id: bulletin.id,
       title: bulletin.title,
       body: bulletin.body ?? '',
+      author: bulletin.author,
     };
 
     const bulletinDocRef = doc(db, ryanFamCollection.BULLETIN, updatedBulletinDocument.id);

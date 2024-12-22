@@ -15,6 +15,10 @@
         <input name="bulletin-title" v-model="store.newBulletin.title" />
       </div>
       <div class="bulletin-control">
+        <label for="bulletin-author">Author:</label>
+        <input name="bulletin-author" v-model="store.newBulletin.author" />
+      </div>
+      <div class="bulletin-control">
         <label for="bulletin-body">Body:</label>
         <textarea name="bulletin-body" v-model="store.newBulletin.body" />
       </div>
