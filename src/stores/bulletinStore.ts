@@ -40,6 +40,12 @@ export const useBulletinStore = defineStore('bulletin', () => {
 
   //#region Existing/Edit Bulletin Handling
 
+  const getBulletinById = (id: string): Bulletin => {
+    const bulletin = bulletins.value.find((x) => x.id === id);
+    if (!bulletin) throw `Cannot find bulletin with id ${id}`;
+    return bulletin;
+  };
+
   const bulletinBeingEdited: Ref<Bulletin | null> = ref({} as Bulletin);
 
   const setBulletinBeingEdited = (bulletin: Bulletin) => {
@@ -169,6 +175,7 @@ export const useBulletinStore = defineStore('bulletin', () => {
     bulletinBeingEdited,
     initializeNewBulletin,
     finalizeAndAddNewBulletin,
+    getBulletinById,
     saveBulletinChanges,
     deleteBulletinById,
     resetBulletinBeingEdited,
