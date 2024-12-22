@@ -1,5 +1,7 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import BulletinView from '../views/BulletinView.vue'
+import BulletinPageView from '@/views/BulletinPageView.vue';
+import BulletinView from '@/views/BulletinView.vue';
+import { createRouter, createWebHistory } from 'vue-router';
+// import BulletinView from '../views/BulletinView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -8,6 +10,11 @@ const router = createRouter({
       path: '/bulletin',
       name: 'bulletin',
       component: BulletinView,
+    },
+    {
+      path: '/bulletin/:id',
+      name: 'bulletin-page',
+      component: BulletinPageView,
     },
     {
       path: '/calendar',
@@ -23,6 +30,6 @@ const router = createRouter({
       component: () => import('../views/AboutView.vue'),
     },
   ],
-})
+});
 
-export default router
+export default router;

@@ -32,5 +32,9 @@ const store = useBulletinStore();
     display: grid;
     gap: 8px;
   }
+
+  &__card {
+    width: min-content;
+  }
 }
 </style>
