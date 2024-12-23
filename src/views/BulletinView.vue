@@ -1,6 +1,9 @@
 <template>
   <main>
-    <div class="bulletin-view">
+    <div v-if="!loginStore.pwAccepted">
+      <SimpleLogin></SimpleLogin>
+    </div>
+    <div class="bulletin-view" v-else>
       <NewBulletinModal v-if="store.modalNew.show" />
       <div class="bulletin-view__cards">
         <button
@@ -30,10 +33,13 @@
 <script setup lang="ts">
 import BulletinCard from '@/components/BulletinCard/BulletinCard.vue';
 import NewBulletinModal from '@/components/BulletinModals/NewBulletinModal/NewBulletinModal.vue';
+import SimpleLogin from '@/components/SimpleLogin/SimpleLogin.vue';
 import { useBulletinStore } from '@/stores/bulletinStore';
+import { useLoginStore } from '@/stores/loginStore';
 import { computed } from 'vue';
 
 const store = useBulletinStore();
+const loginStore = useLoginStore();
 
 const bulletinsChronological = computed(() =>
   [...store.bulletins].sort((a, b) => (a.created < b.created ? 1 : -1)),
