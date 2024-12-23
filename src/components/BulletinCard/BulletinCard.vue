@@ -35,8 +35,19 @@ const route = computed(() => `/bulletin/${props.bulletin.id}`);
   color: var(--primary-text);
   overflow-y: hidden;
 
+  @media (max-width: 700px) {
+    width: 220px;
+    height: 220px;
+  }
+
+  @media (max-width: 500px) {
+    width: 240px;
+    height: 240px;
+  }
+
   &__title {
     font-size: 16px;
+    text-align: center;
   }
   &__body {
     font-size: 12px;

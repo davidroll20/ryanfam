@@ -24,16 +24,16 @@
 // }
 
 // @media (min-width: 1024px) {
-//   body {
-//     display: flex;
-//     place-items: center;
-//   }
+body {
+  display: flex;
+  place-items: center;
+}
 
-//   #app {
-//     display: grid;
-//     grid-template-columns: 1fr;
-//     grid-template-rows: min-content min-content;
-//     padding: 1rem 2rem;
-//     min-height: 100vh;
-//   }
+#app {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: min-content min-content;
+  padding: 1rem 2rem;
+  min-height: 100vh;
+}
 // }

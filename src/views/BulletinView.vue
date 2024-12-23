@@ -3,7 +3,11 @@
     <div class="bulletin-view">
       <NewBulletinModal v-if="store.modalNew.show" />
       <div class="bulletin-view__cards">
-        <button class="bulletin-view__card bulletin-view__card--add" @click="handleOpenModal()">
+        <button
+          class="bulletin-view__card bulletin-view__card--add"
+          @click="handleOpenModal()"
+          title="Add a new bulletin"
+        >
           <unicon
             name="plus-circle"
             fill="var(--ryan-fam-blue)"
@@ -16,6 +20,7 @@
           v-for="bulletin in bulletinsChronological"
           :key="bulletin.id"
           :bulletin="bulletin"
+          title="Click to read more"
         />
       </div>
     </div>
@@ -64,6 +69,7 @@ const handleOpenModal = () => {
   &__card {
     width: min-content;
     text-decoration: none;
+    margin: auto;
 
     &--add {
       border: 1px solid var(--ryan-fam-blue);
@@ -73,6 +79,17 @@ const handleOpenModal = () => {
       height: 200px;
       background-color: grey; //todo var
       font-size: 24px;
+
+      @media (max-width: 700px) {
+        width: 220px;
+        height: 220px;
+      }
+
+      @media (max-width: 500px) {
+        width: 240px;
+        height: 110px;
+      }
+
       &:hover {
         cursor: pointer;
         border: 1px solid var(--ryan-fam-green);
