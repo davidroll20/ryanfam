@@ -31,7 +31,7 @@
           <li v-for="event in currentEvents" :key="event.id">
             <b>{{ event.startStr }}</b>
             <i>{{ event.title }}</i>
-            <button class="show-more" @click="toggleInfo(event.id)">
+            <button class="event-calendar__show-more" @click="toggleInfo(event.id)">
               <unicon
                 name="info-circle"
                 fill="var(--ryan-fam-blue)"
@@ -62,60 +62,60 @@
 </template>
 
 <script setup lang="ts">
-import FullCalendar from '@fullcalendar/vue3'
-import dayGridPlugin from '@fullcalendar/daygrid'
-import timeGridPlugin from '@fullcalendar/timegrid'
-import interactionPlugin from '@fullcalendar/interaction'
-import type { CalendarOptions, DateSelectArg, EventApi } from '@fullcalendar/core'
-import { computed, onMounted, ref, type Ref } from 'vue'
-import { useEventStore } from '@/stores/eventStore'
-import { convertLocalToUTC } from './event-utils'
+import FullCalendar from '@fullcalendar/vue3';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import timeGridPlugin from '@fullcalendar/timegrid';
+import interactionPlugin from '@fullcalendar/interaction';
+import type { CalendarOptions, DateSelectArg, EventApi } from '@fullcalendar/core';
+import { computed, onMounted, ref, type Ref } from 'vue';
+import { useEventStore } from '@/stores/eventStore';
+import { convertLocalToUTC } from './event-utils';
 
-const eventStore = useEventStore()
+const eventStore = useEventStore();
 
-const calendar = ref<InstanceType<typeof FullCalendar>>()
+const calendar = ref<InstanceType<typeof FullCalendar>>();
 
 onMounted(() => {
-  eventStore.calendarRef = calendar.value
-})
+  eventStore.calendarRef = calendar.value;
+});
 
-const currentEvents: Ref<EventApi[]> = ref([])
-const showSidebar = ref(true)
-const showInstructions = ref(false)
-const showInfo: Ref<{ [key: string]: boolean }> = ref({})
+const currentEvents: Ref<EventApi[]> = ref([]);
+const showSidebar = ref(true);
+const showInstructions = ref(false);
+const showInfo: Ref<{ [key: string]: boolean }> = ref({});
 
 const toggleSidebar = () => {
-  showSidebar.value = !showSidebar.value
-}
+  showSidebar.value = !showSidebar.value;
+};
 const toggleInstructions = () => {
-  showInstructions.value = !showInstructions.value
-}
+  showInstructions.value = !showInstructions.value;
+};
 
 const handleDateSelect = (selectInfo: DateSelectArg) => {
-  eventStore.calendarApi.unselect() // clear date selection
-  selectInfo.startStr = convertLocalToUTC(selectInfo.startStr)
-  selectInfo.endStr = convertLocalToUTC(selectInfo.endStr)
-  eventStore.initializeNewEvent(selectInfo)
-  eventStore.openModalNew('Create a new event')
-}
+  eventStore.calendarApi.unselect(); // clear date selection
+  selectInfo.startStr = convertLocalToUTC(selectInfo.startStr);
+  selectInfo.endStr = convertLocalToUTC(selectInfo.endStr);
+  eventStore.initializeNewEvent(selectInfo);
+  eventStore.openModalNew('Create a new event');
+};
 const handleEventClick = (clickInfo) => {
-  eventStore.openModalEdit(clickInfo.event.title, clickInfo.event)
-}
+  eventStore.openModalEdit(clickInfo.event.title, clickInfo.event);
+};
 const handleEvents = (events: EventApi[]) => {
-  currentEvents.value = [...events]
-  currentEvents.value.sort((a, b) => (a.startStr > b.startStr ? 1 : -1))
-}
+  currentEvents.value = [...events];
+  currentEvents.value.sort((a, b) => (a.startStr > b.startStr ? 1 : -1));
+};
 
 const toggleInfo = (eventId: string) => {
-  showInfo.value[eventId] = showInfo.value[eventId] === undefined ? true : !showInfo.value[eventId]
-}
+  showInfo.value[eventId] = showInfo.value[eventId] === undefined ? true : !showInfo.value[eventId];
+};
 
 const events = computed(() => {
   return {
     events: eventStore.calendarEvents,
     id: 'main',
-  }
-})
+  };
+});
 
 const calendarOptions: CalendarOptions = {
   plugins: [
@@ -144,31 +144,11 @@ const calendarOptions: CalendarOptions = {
         eventChange:
         eventRemove:
         */
-}
+};
 </script>
 
 <style lang="scss">
 @use '/src/style/vars' as *;
-
-h2 {
-  margin: 0;
-  font-size: 1.5rem;
-}
-
-ul {
-  margin: 0;
-  padding: 0 0 0 1.5em;
-}
-
-li {
-  margin: 1.5em 0;
-  padding: 0;
-}
-
-b {
-  /* used for event dates/times */
-  margin-right: 3px;
-}
 
 .event-calendar {
   display: flex;
@@ -180,6 +160,26 @@ b {
     sans-serif;
   font-size: 14px;
   flex-grow: 3;
+
+  h2 {
+    margin: 0;
+    font-size: 1.5rem;
+  }
+
+  ul {
+    margin: 0;
+    padding: 0 0 0 1.5em;
+  }
+
+  li {
+    margin: 1.5em 0;
+    padding: 0;
+  }
+
+  b {
+    /* used for event dates/times */
+    margin-right: 3px;
+  }
 
   &__sidebar-control {
     width: 2rem;
@@ -200,6 +200,28 @@ b {
     flex-grow: 1;
     padding: 2rem;
   }
+
+  &__show-more {
+    background-color: transparent;
+    border-radius: 16px;
+    border: none;
+    margin-left: var(--space-sm);
+    height: 1.25rem;
+    padding: 0;
+
+    &:hover {
+      background-color: var(--ryan-fam-green);
+
+      svg {
+        fill: black;
+      }
+    }
+
+    svg {
+      width: 1.25rem;
+      height: 1.25rem;
+    }
+  }
 }
 
 .fc {
@@ -210,27 +232,5 @@ b {
 
 .fc-view-harness {
   width: 600px;
-}
-
-.show-more {
-  background-color: transparent;
-  border-radius: 16px;
-  border: none;
-  margin-left: var(--space-sm);
-  height: 1.25rem;
-  padding: 0;
-
-  &:hover {
-    background-color: var(--ryan-fam-green);
-
-    svg {
-      fill: black;
-    }
-  }
-
-  svg {
-    width: 1.25rem;
-    height: 1.25rem;
-  }
 }
 </style>
