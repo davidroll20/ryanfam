@@ -11,6 +11,7 @@ export const useLoginStore = defineStore('login', () => {
   };
 
   const verifyPW = () => {
+    if (strike.value) return;
     const shifted = Number(pw.value) << Number(pw.value[2]);
     const shiftedStr = shifted.toString();
     if (
