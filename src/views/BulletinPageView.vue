@@ -1,6 +1,9 @@
 <template>
   <main>
-    <div class="bulletin-page-view">
+    <div v-if="!loginStore.pwAccepted">
+      <SimpleLogin></SimpleLogin>
+    </div>
+    <div class="bulletin-page-view" v-else>
       <EditBulletinModal v-if="store.modalEdit.show" />
       <div class="bulletin-page">
         <h1>{{ bulletin.title }}</h1>
@@ -16,11 +19,14 @@
 
 <script setup lang="ts">
 import EditBulletinModal from '@/components/BulletinModals/EditBulletinModal/EditBulletinModal.vue';
+import SimpleLogin from '@/components/SimpleLogin/SimpleLogin.vue';
 import { useBulletinStore } from '@/stores/bulletinStore';
+import { useLoginStore } from '@/stores/loginStore';
 import { computed } from 'vue';
 import { useRoute } from 'vue-router';
 
 const store = useBulletinStore();
+const loginStore = useLoginStore();
 const route = useRoute();
 
 const bulletin = computed(() => store.getBulletinById(route.params.id as string));
