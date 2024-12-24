@@ -1,6 +1,6 @@
 <template>
   <main>
-    <div v-if="!loginStore.pwAccepted">
+    <div v-if="!loginStore.isSignedIn">
       <SimpleLogin></SimpleLogin>
     </div>
     <div class="bulletin-view" v-else>
