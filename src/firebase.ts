@@ -3,8 +3,8 @@ import { collection, getFirestore } from 'firebase/firestore';
 
 export const firebaseApp = initializeApp({
   apiKey: 'AIzaSyBQ6izD-t26QvAFhHV9SvmNy1cdt9fLaz8',
-  // authDomain: 'ryan-fam.firebaseapp.com',
-  authDomain: 'www.ryan-fam.com',
+  authDomain: 'ryan-fam.firebaseapp.com',
+  // authDomain: 'www.ryan-fam.com',
   projectId: 'ryan-fam',
   storageBucket: 'ryan-fam.firebasestorage.app',
   messagingSenderId: '750155303707',

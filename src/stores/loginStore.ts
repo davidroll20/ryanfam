@@ -1,11 +1,105 @@
-import { ref } from 'vue';
+import { computed, ref, type Ref } from 'vue';
 import { defineStore } from 'pinia';
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  type User,
+  signInWithEmailAndPassword,
+} from 'firebase/auth';
 
 export const useLoginStore = defineStore('login', () => {
   const pw = ref('');
+  const email = ref('');
   const pwAccepted = ref(false);
   const strike = ref(false);
+  const pwInvalid = ref(false);
+  const emailInvalid = ref(false);
   const showInput = ref(false);
+  const errorMessage = ref('');
+  const user: Ref<User | undefined> = ref();
+
+  const isSignedIn = computed(() => {
+    return user.value !== undefined;
+  });
+
+  const validatePw = () => {
+    if (
+      pw.value.length > 6 &&
+      (pw.value.includes('!') ||
+        pw.value.includes('@') ||
+        pw.value.includes('#') ||
+        pw.value.includes('$') ||
+        pw.value.includes('%') ||
+        pw.value.includes('^') ||
+        pw.value.includes('&') ||
+        pw.value.includes('*') ||
+        pw.value.includes('(') ||
+        pw.value.includes(')') ||
+        pw.value.includes('-') ||
+        pw.value.includes('+'))
+    ) {
+      pwInvalid.value = false;
+      errorMessage.value = '';
+      return true;
+    } else {
+      pwInvalid.value = true;
+      errorMessage.value =
+        'Your password must be longer than 6 characters and include one of the following special characters: !@#$%^&*()_+.';
+      return false;
+    }
+  };
+
+  const validateEmail = () => {
+    const at = email.value.indexOf('@');
+    if (at > 0 && at !== email.value.length - 1) {
+      emailInvalid.value = false;
+      errorMessage.value = '';
+      return true;
+    } else {
+      emailInvalid.value = true;
+      errorMessage.value = 'You must enter a valid email address.';
+      return false;
+    }
+  };
+
+  const emailCreate = () => {
+    if (!validateEmail() || !validatePw()) {
+      return;
+    }
+    const auth = getAuth();
+    createUserWithEmailAndPassword(auth, email.value, pw.value)
+      .then((userCredential) => {
+        // Signed up
+        user.value = userCredential.user;
+        errorMessage.value = '';
+        // ...
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMsg = error.message;
+        errorMessage.value = `Sign-up failed: ${errorCode}: ${errorMsg}`;
+        // ..
+      });
+  };
+
+  const emailSignin = () => {
+    if (!validateEmail() || !validatePw()) {
+      return;
+    }
+    const auth = getAuth();
+    signInWithEmailAndPassword(auth, email.value, pw.value)
+      .then((userCredential) => {
+        // Signed in
+        user.value = userCredential.user;
+        errorMessage.value = '';
+        // ...
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMsg = error.message;
+        errorMessage.value = `Login failed: ${errorCode}: ${errorMsg}`;
+      });
+  };
 
   const proxyVerify = () => {
     verifyPW();
@@ -47,6 +141,13 @@ export const useLoginStore = defineStore('login', () => {
 
   return {
     pw,
+    email,
+    pwInvalid,
+    emailInvalid,
+    isSignedIn,
+    errorMessage,
+    emailCreate,
+    emailSignin,
     proxyVerify,
     pwAccepted,
     strike,
