@@ -1,7 +1,7 @@
 <template>
   <div class="greetings">
     <h1 class="title">{{ props.msg }}</h1>
-    <h3>Check out the latest in Bulletin or click Calendar to see what's coming up!</h3>
+    <!-- <h3>Check out the latest in Bulletin or click Calendar to see what's coming up!</h3> -->
   </div>
 </template>
 
