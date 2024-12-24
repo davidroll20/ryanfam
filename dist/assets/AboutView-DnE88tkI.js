@@ -1,1 +1,0 @@
-import{C as o,x as t,l as a,o as l}from"./index-BIdRepUh.js";const n={};function r(s,e){return l(),t("main",null,e[0]||(e[0]=[a("div",{class:"about-view"},[a("h1",null,"Email me at davidclaytonherald@gmail.com")],-1)]))}const i=o(n,[["render",r]]);export{i as default};
