@@ -22,13 +22,36 @@
 
     <span v-if="store.strike">Try again in a moment.</span>
     <button @click="store.proxyVerify()" class="simple-login__submit">Submit</button>
+    <button @click="signinRedirect()" class="simple-login__submit">Sign-in with Google</button>
   </div>
 </template>
 
 <script setup lang="ts">
 import { useLoginStore } from '@/stores/loginStore';
+import { getRedirectResult, GoogleAuthProvider, signInWithRedirect } from 'firebase/auth';
+import { onMounted, ref } from 'vue';
+import { useFirebaseAuth } from 'vuefire';
 
 const store = useLoginStore();
+
+const auth = useFirebaseAuth(); // only exists on client side
+
+// display errors if any
+const error = ref(null);
+function signinRedirect() {
+  signInWithRedirect(auth, new GoogleAuthProvider()).catch((reason) => {
+    console.error('Failed signinRedirect', reason);
+    error.value = reason;
+  });
+}
+
+// only on client side
+onMounted(() => {
+  getRedirectResult(auth).catch((reason) => {
+    console.error('Failed redirect result', reason);
+    error.value = reason;
+  });
+});
 </script>
 
 <style lang="scss">

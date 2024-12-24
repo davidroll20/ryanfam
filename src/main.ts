@@ -20,7 +20,7 @@ import {
   uniEye,
 } from 'vue-unicons/dist/icons';
 import { firebaseApp } from './firebase';
-import { VueFire } from 'vuefire';
+import { VueFire, VueFireAuth } from 'vuefire';
 
 Unicon.add([
   uniCheck,
@@ -42,7 +42,7 @@ app.use(Unicon);
 app.use(createPinia());
 app.use(VueFire, {
   firebaseApp,
-  // modules: [VueFireFirestoreOptionsAPI()],
+  modules: [VueFireAuth()],
 });
 
 app.use(router);
