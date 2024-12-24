@@ -98,7 +98,7 @@ const handleDateSelect = (selectInfo: DateSelectArg) => {
   eventStore.initializeNewEvent(selectInfo);
   eventStore.openModalNew('Create a new event');
 };
-const handleEventClick = (clickInfo) => {
+const handleEventClick = (clickInfo: { event: EventApi }) => {
   eventStore.openModalEdit(clickInfo.event.title, clickInfo.event);
 };
 const handleEvents = (events: EventApi[]) => {

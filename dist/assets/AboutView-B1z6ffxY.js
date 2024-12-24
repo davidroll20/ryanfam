@@ -1,0 +1,1 @@
+import{_ as t,f as a,g as o,e as s}from"./index-DBzMH3cf.js";const c={},n={class:"about-view"};function r(l,e){return s(),a("div",n,e[0]||(e[0]=[o("h1",null,"Email me at davidclaytonherald@gmail.com",-1)]))}const d=t(c,[["render",r]]);export{d as default};
