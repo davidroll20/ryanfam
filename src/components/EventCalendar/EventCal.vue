@@ -1,10 +1,10 @@
 <template>
   <div class="event-calendar">
-    <button class="event-calendar__sidebar-control" @click="toggleSidebar">
+    <!-- <button class="event-calendar__sidebar-control" @click="toggleSidebar">
       {{ showSidebar ? '>>' : '<<' }}
-    </button>
-    <div class="event-calendar__sidebar" v-if="showSidebar">
-      <button @click="toggleInstructions">
+    </button> -->
+    <div class="event-calendar__sidebar">
+      <button @click="toggleInstructions" class="event-calendar__toggle-help">
         {{ showInstructions ? 'Hide Help' : 'Show Help' }}
       </button>
       <div class="event-calendar__sidebar-section" v-if="showInstructions">
@@ -160,6 +160,21 @@ const calendarOptions: CalendarOptions = {
     sans-serif;
   font-size: 14px;
   flex-grow: 3;
+
+  &__toggle-help {
+    background-color: var(--button-dark);
+    padding: var(--space-sm);
+    font-size: 1rem;
+    border-radius: 4px 0px 0px 4px;
+    border: 1px solid var(--button-dark);
+    color: var(--ryan-fam-blue);
+    float: right;
+
+    &:hover {
+      color: var(--ryan-fam-green);
+      border: 1px solid var(--ryan-fam-green);
+    }
+  }
 
   h2 {
     margin: 0;

@@ -1,12 +1,14 @@
 <template>
-  <div v-if="!loginStore.pwAccepted">
-    <SimpleLogin></SimpleLogin>
-  </div>
-  <div class="calendar-view" v-else>
-    <NewEventModal v-if="store.modalNew.show" />
-    <EditEventModal v-if="store.modalEdit.show" />
-    <EventCalendar />
-  </div>
+  <main>
+    <div v-if="!loginStore.pwAccepted">
+      <SimpleLogin></SimpleLogin>
+    </div>
+    <div class="calendar-view" v-else>
+      <NewEventModal v-if="store.modalNew.show" />
+      <EditEventModal v-if="store.modalEdit.show" />
+      <EventCalendar />
+    </div>
+  </main>
 </template>
 
 <script setup lang="ts">

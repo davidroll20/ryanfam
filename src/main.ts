@@ -17,6 +17,7 @@ import {
   uniInfoCircle,
   uniAngleUp,
   uniPlusCircle,
+  uniEye,
 } from 'vue-unicons/dist/icons';
 import { firebaseApp } from './firebase';
 import { VueFire } from 'vuefire';
@@ -32,6 +33,7 @@ Unicon.add([
   uniInfoCircle,
   uniAngleUp,
   uniPlusCircle,
+  uniEye,
 ]);
 
 const app = createApp(App);

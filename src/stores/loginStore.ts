@@ -5,9 +5,14 @@ export const useLoginStore = defineStore('login', () => {
   const pw = ref('');
   const pwAccepted = ref(false);
   const strike = ref(false);
+  const showInput = ref(false);
 
   const proxyVerify = () => {
     verifyPW();
+  };
+
+  const toggleShowInput = () => {
+    showInput.value = !showInput.value;
   };
 
   const verifyPW = () => {
@@ -45,5 +50,7 @@ export const useLoginStore = defineStore('login', () => {
     proxyVerify,
     pwAccepted,
     strike,
+    showInput,
+    toggleShowInput,
   };
 });
