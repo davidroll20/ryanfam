@@ -19,8 +19,8 @@ export const useLoginStore = defineStore('login', () => {
   const user: Ref<User | undefined> = ref();
 
   const isSignedIn = computed(() => {
-    return true;
-    // return user.value !== undefined;
+    // return true;
+    return user.value !== undefined;
   });
 
   const validatePw = () => {
