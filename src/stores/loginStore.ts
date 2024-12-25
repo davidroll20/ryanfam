@@ -19,9 +19,11 @@ export const useLoginStore = defineStore('login', () => {
   const errorMessage = ref('');
   const user: Ref<User | undefined> = ref();
 
+  const currentUser = useCurrentUser();
+
   const isSignedIn = computed(() => {
     // return user.value !== undefined;
-    return useCurrentUser() != null;
+    return currentUser.value != null;
   });
 
   const validatePw = () => {
