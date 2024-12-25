@@ -17,9 +17,9 @@
     </div>
     <div class="app-header__nav-wrapper">
       <nav>
-        <RouterLink to="/bulletin">Bulletin</RouterLink>
-        <RouterLink to="/calendar">Calendar</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
+        <RouterLink :to="{ name: 'bulletin' }">Bulletin</RouterLink>
+        <RouterLink :to="{ name: 'calendar' }">Calendar</RouterLink>
+        <RouterLink :to="{ name: 'about' }">About</RouterLink>
       </nav>
     </div>
   </header>
