@@ -95,7 +95,7 @@ const createAndClose = () => {
   &__container {
     width: 100%;
     height: 100%;
-    padding: 4px 8px;
+    padding: var(--space-sm) var(--space-md);
   }
 
   &__control {

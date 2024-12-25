@@ -22,7 +22,7 @@
       >
         <button v-if="showDelete" class="my-modal__delete" @click="deleteItem">Delete</button>
         <button v-if="showDiscard" class="my-modal__discard" @click="discardChanges">
-          Discard
+          Discard Changes
         </button>
         <button v-if="showSave" class="my-modal__save" @click="saveChanges">Save</button>
       </div>
@@ -234,6 +234,7 @@ const contentClasses = computed(() => ({
     padding: 0.5rem 1rem;
     border: none;
     border-radius: 0.5rem;
+    white-space: nowrap;
 
     font-size: 1rem;
 
@@ -245,6 +246,8 @@ const contentClasses = computed(() => ({
 
   &__delete {
     background: var(--button-delete);
+    border: 1px solid var(--button-delete-hover);
+    margin-right: auto;
 
     &:hover {
       background: var(--button-delete-hover);
@@ -253,9 +256,11 @@ const contentClasses = computed(() => ({
 
   &__discard {
     background: var(--button-discard);
+    border: 1px solid var(--button-discard-border);
 
     &:hover {
       background: var(--button-discard-hover);
+      border: 1px solid var(--button-discard-border-hover);
     }
   }
 

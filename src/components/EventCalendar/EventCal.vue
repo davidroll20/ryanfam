@@ -53,8 +53,9 @@
     <div class="event-calendar__main">
       <FullCalendar ref="calendar" class="event-calendar__calendar" :options="calendarOptions">
         <template v-slot:eventContent="arg">
-          <b>{{ arg.timeText }}</b>
-          <i>{{ arg.event.title }}</i>
+          <div :title="arg.event.title">
+            <b>{{ arg.timeText }}</b> <i>{{ arg.event.title }}</i>
+          </div>
         </template>
       </FullCalendar>
     </div>
@@ -102,8 +103,9 @@ const handleEventClick = (clickInfo: { event: EventApi }) => {
   eventStore.openModalEdit(clickInfo.event.title, clickInfo.event);
 };
 const handleEvents = (events: EventApi[]) => {
-  currentEvents.value = [...events];
-  currentEvents.value.sort((a, b) => (a.startStr > b.startStr ? 1 : -1));
+  let eventsToSort = [...events];
+  eventsToSort = eventsToSort.filter((x) => x.start > new Date());
+  currentEvents.value = eventsToSort.sort((a, b) => (a.startStr > b.startStr ? 1 : -1));
 };
 
 const toggleInfo = (eventId: string) => {
@@ -248,6 +250,10 @@ const calendarOptions: CalendarOptions = {
   /* the calendar root */
   max-width: 1100px;
   margin: 0 auto;
+}
+
+.fc-event-main {
+  overflow-x: hidden;
 }
 
 .fc-view-harness {
