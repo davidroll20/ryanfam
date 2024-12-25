@@ -199,3 +199,8 @@ export const timeOptions: TimeOption[] = [
     display: '11:00 PM',
   },
 ];
+
+export const displayPretty = (date: Date) => {
+  if (!date) return;
+  return format(date, 'E. MMM dd, yyyy hh:mm a');
+};

@@ -10,26 +10,21 @@
       <div class="event-calendar__sidebar-section" v-if="showInstructions">
         <h2>Instructions</h2>
         <ul>
-          <li>Select dates and you will be prompted to create a new event</li>
-          <li>Drag, drop, and resize events</li>
-          <li>Click an event to delete it</li>
+          <li>Creating new events: Select a date by clicking or drag to select a span of days.</li>
+          <li>Click an event to see its details, edit it or remove it.</li>
+          <li>Hover over an event to see its full title.</li>
+          <li>
+            Use the sidebar to see events that haven't happened yet, in order of what's next! Click
+            the (i) button next to an event in the sidebar to see its description.
+          </li>
         </ul>
       </div>
-      <!-- <div class="demo-app-sidebar-section">
-        <label>
-          <input
-            type="checkbox"
-            :checked="calendarOptions.weekends"
-            @change="handleWeekendsToggle"
-          />
-          toggle weekends
-        </label>
-      </div> -->
       <div class="event-calendar__sidebar-section">
         <h2>Upcoming ({{ currentEvents.length }})</h2>
         <ul>
           <li v-for="event in currentEvents" :key="event.id">
-            <b>{{ event.startStr }}</b>
+            <b>{{ displayPretty(event.start) }}</b>
+            <br />
             <i>{{ event.title }}</i>
             <button class="event-calendar__show-more" @click="toggleInfo(event.id)">
               <unicon
@@ -70,7 +65,7 @@ import interactionPlugin from '@fullcalendar/interaction';
 import type { CalendarOptions, DateSelectArg, EventApi } from '@fullcalendar/core';
 import { computed, onMounted, ref, type Ref } from 'vue';
 import { useEventStore } from '@/stores/eventStore';
-import { convertLocalToUTC } from './event-utils';
+import { convertLocalToUTC, displayPretty } from './event-utils';
 
 const eventStore = useEventStore();
 
@@ -252,7 +247,8 @@ const calendarOptions: CalendarOptions = {
   margin: 0 auto;
 }
 
-.fc-event-main {
+.fc-event-main,
+.fc-daygrid-event-harness {
   overflow-x: hidden;
 }
 
