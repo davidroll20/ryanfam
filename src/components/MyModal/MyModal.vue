@@ -31,84 +31,84 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue';
 
 type MyModalProps = {
-  open?: boolean
-  showClose?: boolean
-  showSave?: boolean
-  showDelete?: boolean
-  showDiscard?: boolean
-  disableScroll?: boolean
-  title: string
-  onSave?: () => void
-  onDelete?: () => void
-  onDiscard?: () => void
-  onClose?: () => void
-  onOpen?: () => void
-}
+  open?: boolean;
+  showClose?: boolean;
+  showSave?: boolean;
+  showDelete?: boolean;
+  showDiscard?: boolean;
+  disableScroll?: boolean;
+  title: string;
+  onSave?: () => void;
+  onDelete?: () => void;
+  onDiscard?: () => void;
+  onClose?: () => void;
+  onOpen?: () => void;
+};
 
-const props = defineProps<MyModalProps>()
-const emit = defineEmits([`close`])
+const props = defineProps<MyModalProps>();
+const emit = defineEmits([`close`]);
 
 // Refs
 
-const dialog = ref<HTMLDialogElement | null>(null)
-const dialogID = computed(() => `dialog-${props.title}`)
+const dialog = ref<HTMLDialogElement | null>(null);
+const dialogID = computed(() => `dialog-${props.title}`);
 
 // Opening and Closing the Modal
 
 const openModal = () => {
   if (dialog.value) {
-    dialog.value.showModal()
+    dialog.value.showModal();
   }
   if (props.onOpen) {
-    props.onOpen()
+    props.onOpen();
   }
-}
+};
 
 const closeModal = () => {
   if (dialog.value) {
-    dialog.value.close()
+    dialog.value.close();
   }
   if (props.onClose) {
-    props.onClose()
+    props.onClose();
   }
-}
+};
 
 const deleteItem = () => {
-  closeModal()
+  closeModal();
   if (props.onDelete) {
-    props.onDelete()
+    props.onDelete();
   }
-}
+};
 
 const discardChanges = () => {
-  closeModal()
+  closeModal();
   if (props.onDiscard) {
-    props.onDiscard()
+    props.onDiscard();
   }
-}
+};
 
 const saveChanges = () => {
-  closeModal()
+  closeModal();
   if (props.onSave) {
-    props.onSave()
+    props.onSave();
   }
-}
+};
 
 const clickAway = (e: MouseEvent) => {
-  emit(`close`)
+  emit(`close`);
   if (e.target === dialog.value) {
-    closeModal()
+    closeModal();
   }
-}
+};
 
 onMounted(() => {
   if (props.open) {
-    openModal()
+    openModal();
   }
-})
+});
 
 // Watchers
 
@@ -116,31 +116,31 @@ watch(
   () => props.open,
   (isOpen) => {
     if (isOpen) {
-      openModal()
+      openModal();
     }
     if (!isOpen) {
-      closeModal()
+      closeModal();
     }
   },
-)
+);
 
 // Styles
 
 const contentClasses = computed(() => ({
   'my-modal__content': true,
   'my-modal__content--disable-scroll': props.disableScroll,
-}))
+}));
 </script>
 
 <style lang="scss">
 @use '/src/style/mixins' as *;
 .my-modal {
   margin: auto;
-  min-width: 50dvw;
+  min-width: 30dvw;
   width: max-content;
-  max-width: 75dvw;
-  max-height: 80dvh;
-  height: 80dvh;
+  max-width: 40dvw;
+  max-height: 60dvh;
+  height: 60dvh;
   padding: 0;
 
   border-radius: 1rem;

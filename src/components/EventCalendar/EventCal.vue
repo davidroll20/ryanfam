@@ -207,6 +207,11 @@ const calendarOptions: CalendarOptions = {
     line-height: 1.5;
     background: var(--background-dark);
     border-right: 1px solid #d3e2e8;
+
+    @media (max-width: 800px) {
+      visibility: hidden;
+      position: absolute;
+    }
   }
   &__sidebar-section {
     padding: 1rem;
@@ -247,5 +252,13 @@ const calendarOptions: CalendarOptions = {
 
 .fc-view-harness {
   width: 600px;
+
+  @media (max-width: 800px) {
+    width: 500px;
+  }
+
+  @media (max-width: 500px) {
+    width: 300px;
+  }
 }
 </style>

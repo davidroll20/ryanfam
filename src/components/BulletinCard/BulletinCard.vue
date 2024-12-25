@@ -1,5 +1,5 @@
 <template>
-  <RouterLink :to="route">
+  <RouterLink :to="{ name: 'bulletin-page', params: { id: props.bulletin.id } }">
     <div class="bulletin-card">
       <h1 class="bulletin-card__title">{{ props.bulletin.title }}</h1>
       <sub>by {{ props.bulletin.author }}</sub>
@@ -10,7 +10,7 @@
 
 <script setup lang="ts">
 import { RouterLink } from 'vue-router';
-import { computed } from 'vue';
+// import { computed } from 'vue';
 import type { Bulletin } from '@/stores/bulletinStore';
 
 type BulletinCardProps = {
@@ -19,7 +19,7 @@ type BulletinCardProps = {
 
 const props = defineProps<BulletinCardProps>();
 
-const route = computed(() => `/bulletin/${props.bulletin.id}`);
+// const route = computed(() => `#bulletin#${props.bulletin.id}`);
 </script>
 
 <style lang="scss">
