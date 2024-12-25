@@ -152,6 +152,14 @@ const contentClasses = computed(() => ({
 
   overflow: hidden;
 
+  @media (max-width: 1000px) {
+    max-width: 50dvw;
+  }
+
+  @media (max-width: 500px) {
+    max-width: 80dvw;
+  }
+
   h2 {
     margin: 0;
   }
