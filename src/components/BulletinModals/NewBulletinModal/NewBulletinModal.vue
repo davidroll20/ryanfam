@@ -10,17 +10,29 @@
     class="bulletin-modal"
   >
     <div class="bulletin-modal__container" @click.stop>
-      <div class="bulletin-control">
-        <label for="bulletin-title">Title:</label>
-        <input name="bulletin-title" v-model="store.newBulletin.title" />
+      <div class="bulletin-modal__control">
+        <label for="bulletin-title" class="bulletin-modal__control--label">Title:</label>
+        <input
+          name="bulletin-title"
+          class="bulletin-modal__control--input"
+          v-model="store.newBulletin.title"
+        />
       </div>
-      <div class="bulletin-control">
-        <label for="bulletin-author">Author:</label>
-        <input name="bulletin-author" v-model="store.newBulletin.author" />
+      <div class="bulletin-modal__control">
+        <label for="bulletin-author" class="bulletin-modal__control--label">Author:</label>
+        <input
+          name="bulletin-author"
+          class="bulletin-modal__control--input"
+          v-model="store.newBulletin.author"
+        />
       </div>
-      <div class="bulletin-control">
-        <label for="bulletin-body">Body:</label>
-        <textarea name="bulletin-body" v-model="store.newBulletin.body" />
+      <div class="bulletin-modal__control">
+        <label for="bulletin-body" class="bulletin-modal__control--label">Body:</label>
+        <textarea
+          name="bulletin-body"
+          class="bulletin-modal__control--input"
+          v-model="store.newBulletin.body"
+        />
       </div>
     </div>
   </MyModal>
@@ -46,7 +58,26 @@ const createAndClose = () => {
   &__container {
     width: 100%;
     height: 100%;
-    padding: 4px 8px;
+    padding: var(--space-sm) var(--space-md);
+  }
+
+  &__control {
+    display: grid;
+    grid-template-columns: 100px 250px;
+    margin-bottom: var(--space-md);
+
+    > textarea {
+      height: 10rem;
+      width: 250px;
+    }
+
+    &--label {
+      white-space: nowrap;
+      grid-column: 1;
+    }
+    &--input {
+      grid-column: 2;
+    }
   }
 }
 </style>

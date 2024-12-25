@@ -83,7 +83,7 @@ const handleOpenModal = () => {
       padding: 8px;
       width: 200px;
       height: 200px;
-      background-color: grey; //todo var
+      background-color: var(--bulletin-background);
       font-size: 24px;
 
       @media (max-width: 700px) {

@@ -31,7 +31,7 @@ const props = defineProps<BulletinCardProps>();
   padding: 8px;
   width: 200px;
   height: 200px;
-  background-color: grey; //todo var
+  background-color: var(--bulletin-background);
   color: var(--primary-text);
   overflow-y: hidden;
 

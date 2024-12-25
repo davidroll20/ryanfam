@@ -10,7 +10,13 @@ html {
   --button-confirm: #{colors.$ryan-fam-green-dim};
   --button-confirm-hover: #{colors.$ryan-fam-green};
   --button-discard: #{colors.$against-background-dark};
+  --button-discard-border: #{colors.$against-background-dark};
   --button-discard-hover: #{colors.$against-background-dark};
+  --button-discard-border-hover: #{colors.$ryan-fam-blue};
+  --button-delete: #{colors.$against-background-dark};
+  --button-delete-hover: #{colors.$ryan-fam-red};
+
+  --bulletin-background: #{colors.$ryan-fam-green-dark};
 
   --primary-text: #{colors.$off-white};
   --link: #{colors.$ryan-fam-green};
