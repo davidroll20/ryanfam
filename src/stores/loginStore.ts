@@ -6,6 +6,7 @@ import {
   type User,
   signInWithEmailAndPassword,
 } from 'firebase/auth';
+import { useCurrentUser } from 'vuefire';
 
 export const useLoginStore = defineStore('login', () => {
   const pw = ref('');
@@ -19,8 +20,8 @@ export const useLoginStore = defineStore('login', () => {
   const user: Ref<User | undefined> = ref();
 
   const isSignedIn = computed(() => {
-    // return true;
-    return user.value !== undefined;
+    // return user.value !== undefined;
+    return useCurrentUser() != null;
   });
 
   const validatePw = () => {
